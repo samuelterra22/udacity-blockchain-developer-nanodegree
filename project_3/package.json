@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree#readme",
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "level": "^4.0.0",
     "express": "^4.16.3"
   }
 }
