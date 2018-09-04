@@ -30,7 +30,6 @@ node index.js
 Several tools are available on the internet to assist with API development and testing. If your having troubles testing your endpoints, try one of the tools listed below:
 
 * Postman is a powerful tool used to test web services. It was developed for sending HTTP requests in a simple and quick way.
-
 * CURL is a command-line tool used to deliver requests supporting a variety of protocols like HTTP, HTTPS, FTP, FTPS, SFTP, and many more.
 
 _Get block endpoint:_
