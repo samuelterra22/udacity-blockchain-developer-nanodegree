@@ -27,15 +27,16 @@ app.get('/block/:blockHeight', (req, res) => {
   })
 })
 
+// CRITERION: POST Block endpoint using key/value pair within request body.
 app.post('/block', (req, res) => {
   if (!util.empty(req.body.body)) {
 
-    blockchain.addBlock(new Block(req.body.body)).then(res => {
-      const height = blockchain.getBlockHeight()
-      const response = blockchain.getBlock(height)
-      res.send(response)
-    }).catch(err => {
-      res.send(JSON.stringify({error: err}))
+    blockchain.addBlock(new Block(req.body.body)).then(success => {
+      // CRITERION: The block contents must respond to POST request with block contents in JSON format
+      // Note: addBlock method was modified to return the block created
+      res.send(success)
+    }).catch(() => {
+      res.send(JSON.stringify({error: 'There was an error generating a new block'}))
     })
 
   } else {
