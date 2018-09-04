@@ -1,5 +1,5 @@
 {
-  "name": "udacity-blockchain-developer-nanodegree",
+  "name": "project-2-samuel-terra",
   "version": "1.0.0",
   "description": "Private Blockchain",
   "main": "index.js",
@@ -8,20 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree.git"
+    "url": "git+https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree-project-2.git"
   },
   "keywords": [
     "private",
     "blockchain",
     "udacity",
-    "nanodegree"
+    "nanodegree",
+    "project-2"
   ],
   "author": "Samuel Terra",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree/issues"
+    "url": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree-project-2/issues"
   },
-  "homepage": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree#readme",
+  "homepage": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree-project-2#readme",
   "dependencies": {
     "crypto-js": "^3.1.9-1",
     "level": "^4.0.0"
