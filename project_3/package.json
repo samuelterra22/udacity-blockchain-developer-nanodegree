@@ -1,0 +1,30 @@
+{
+  "name": "project_3",
+  "version": "1.0.0",
+  "description": "RESTful web API for private blockchain.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree.git"
+  },
+  "keywords": [
+    "private",
+    "blockchain",
+    "web",
+    "api",
+    "udacity",
+    "nanodegree"
+  ],
+  "author": "Samuel Terra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree/issues"
+  },
+  "homepage": "https://github.com/samuelterra22/udacity-blockchain-developer-nanodegree#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
