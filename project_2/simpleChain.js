@@ -21,7 +21,7 @@ class Blockchain {
     // CRITERION: Genesis block persist as the first block in the blockchain using LevelDB.
     this.getBlockHeight().then((height) => {
       // console.log(height)  // DEBUG
-      if (height === 0) this.addBlock(new Block('Genesis block')).then(() => console.log('Genesis block stored!'))
+      if (height === -1) this.addBlock(new Block('Genesis block')).then(() => console.log('Genesis block stored!'))
     })
   }
 
