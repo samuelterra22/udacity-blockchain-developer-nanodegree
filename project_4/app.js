@@ -36,7 +36,6 @@ app.post('/block', (req, res) => {
   if (!util.empty(req.body.body)) {
 
     blockchain.addBlock(new Block(req.body.body)).then(success => {
-      // CRITERION: The block contents must respond to POST request with block contents in JSON format
       // Note: addBlock method was modified to return the block created
       res.send(success)
     }).catch(() => {

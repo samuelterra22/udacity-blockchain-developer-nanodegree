@@ -22,7 +22,7 @@ npm install
 ## Run the project
 
 ```
-node index.js 
+node app.js 
 ```
 
 ## Project endpoints
