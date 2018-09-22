@@ -13,10 +13,8 @@ const app = express()
 
 // CRITERION: Node.js framework running on port 8000.
 app.listen(8000, () => console.log('Example app listening on port 8000!'))
-app.use(bodyParser.json())       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 // Return the doc
 app.get('/', (req, res) => {
