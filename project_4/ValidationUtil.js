@@ -2,7 +2,7 @@
 const level = require('level')
 const chainDB = './starchaindata'
 const db = level(chainDB)
-const defaultWindow = 30
+const defaultWindow = 300
 
 // lib to validate
 const bitcoinMessage = require('bitcoinjs-message')
