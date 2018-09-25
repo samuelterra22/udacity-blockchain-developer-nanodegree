@@ -86,6 +86,31 @@ class Blockchain {
     })
   }
 
+  // get block by address
+  // CRITERION: Get endpoint with URL parameter for star block hash JSON Response
+  async getBlockByHash (hash) {
+    let block
+
+    return new Promise((resolve, reject) => {
+      db.createReadStream().on('data', (data) => {
+        block = JSON.parse(data.value)
+
+        if (block.hash === hash) {
+          if (data.key !== 0) {
+            block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+            return resolve(block)
+          } else {
+            return resolve(block)
+          }
+        }
+      }).on('error', (error) => {
+        return reject(error)
+      }).on('close', () => {
+        return reject('Block not found')
+      })
+    })
+  }
+
   // validate block
   // CRITERION: Modify the validateBlock() function to validate a block stored within levelDB
   async validateBlock (blockHeight) {

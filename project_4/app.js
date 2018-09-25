@@ -76,9 +76,10 @@ app.post('/message-signature/validate',
 // URL post http://localhost:8000/stars/address:address
 // Blockchain Wallet Address
 app.get('/stars/address:address', async (req, res) => {
-  blockchain.getBlocksByAddress(req.params.address.slice(1)).then(success => {
-    res.send(success)
-  }).catch(() => {
+  blockchain.getBlocksByAddress(req.params.address.slice(1))
+    .then(success => {
+      res.send(success)
+    }).catch(() => {
     res.json({error: 'Block not found'})
   })
 })
@@ -87,18 +88,23 @@ app.get('/stars/address:address', async (req, res) => {
 // URL post http://localhost:8000/stars/hash:hash
 // Star Block Hash
 app.get('/stars/hash:hash', async (req, res) => {
-  res.json(req.params.hash.slice(1))
+  blockchain.getBlockByHash(req.params.hash.slice(1))
+    .then(success => {
+      res.send(success)
+    }).catch(() => {
+    res.json({error: 'Block not found'})
+  })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
-// DONE
 // URL get http://localhost:8000/block/{BLOCK_HEIGHT}
 // Star Block Height
 app.get('/block/:blockHeight', (req, res) => {
-  blockchain.getBlock(req.params.blockHeight).then(success => {
-    // The block contents must respond to GET request with block contents in JSON format
-    res.json(success)
-  }).catch(error => {
+  blockchain.getBlock(req.params.blockHeight)
+    .then(success => {
+      // The block contents must respond to GET request with block contents in JSON format
+      res.json(success)
+    }).catch(error => {
     res.json(error)
   })
 })
@@ -126,10 +132,11 @@ app.post('/block',
       star: req.body.star
     }
 
-    blockchain.addBlock(new Block(block)).then(success => {
-      // Note: addBlock method was modified to return the block created
-      res.json(success)
-    }).catch(() => {
+    blockchain.addBlock(new Block(block))
+      .then(success => {
+        // Note: addBlock method was modified to return the block created
+        res.json(success)
+      }).catch(() => {
       // return a message in json format with error
       res.json({error: 'There was an error generating a new block'})
     })
