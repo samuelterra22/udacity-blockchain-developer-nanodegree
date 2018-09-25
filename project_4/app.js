@@ -15,7 +15,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 //----------------------------------------------------------------------------------------------------------------------
-// URL post http://localhost:8000 - (Return the doc)
+// URL post http://localhost:8000
+// Return the doc
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/README.md'))
 })
@@ -23,7 +24,7 @@ app.get('/', (req, res) => {
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/requestValidation
-// Requirement 3: Validate User Request
+// Validate User Request
 app.post('/requestValidation',
   [
     // address must be required
@@ -40,7 +41,7 @@ app.post('/requestValidation',
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/message-signature/validate
-// Requirement 4: Allow User Message Signature
+// Allow User Message Signature
 app.post('/message-signature/validate',
   [
     // address must be required
@@ -61,18 +62,27 @@ app.post('/message-signature/validate',
   })
 
 //----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/stars/address:address
+// Blockchain Wallet Address
+app.get('/stars/address:address', async (req, res) => {
+  res.json(req.params.address.slice(1))
+})
+
+//----------------------------------------------------------------------------------------------------------------------
 // URL get http://localhost:8000/block/{BLOCK_HEIGHT}
+// Get block height
 app.get('/block/:blockHeight', (req, res) => {
   blockchain.getBlock(req.params.blockHeight).then(success => {
     // The block contents must respond to GET request with block contents in JSON format
-    res.send(JSON.stringify(success))
+    res.json(success)
   }).catch(error => {
-    res.send(res.send(JSON.stringify(error)))
+    res.json(error)
   })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/block
+// Post block in blockchain
 app.post('/block',
   [
     // body must be required
@@ -86,10 +96,10 @@ app.post('/block',
 
     blockchain.addBlock(new Block(req.body.body)).then(success => {
       // Note: addBlock method was modified to return the block created
-      res.send(success)
+      res.json(success)
     }).catch(() => {
       // return a message in json format with error
-      res.send(JSON.stringify({error: 'There was an error generating a new block'}))
+      res.json({error: 'There was an error generating a new block'})
     })
   })
 //----------------------------------------------------------------------------------------------------------------------
