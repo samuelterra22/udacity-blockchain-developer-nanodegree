@@ -4,7 +4,7 @@
 
 const SHA256 = require('crypto-js/sha256')
 
-// Configure LevelDB to persist data
+// Configure LevelDB to persist blockchain data
 const level = require('level')
 const chainDB = './chaindata'
 const db = level(chainDB)

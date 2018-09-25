@@ -44,6 +44,7 @@ app.post('/requestValidation',
     check('address').not().isEmpty(),
   ], async (req, res) => {
 
+    // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()})
@@ -55,7 +56,7 @@ app.post('/requestValidation',
       data = await validateUtil.getPendingAddress(req.body.address)
     } catch (err) {
       console.log(err)
-      data = await validateUtil.saveRequestValidation(req.body.address)
+      data = await validateUtil.saveRequestStarValidation(req.body.address)
     }
 
     res.json(data)
@@ -71,17 +72,26 @@ app.post('/message-signature/validate',
     check('address').not().isEmpty(),
     // signature must be required
     check('signature').not().isEmpty(),
-  ], (req, res) => {
+  ], async (req, res) => {
 
+    // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()})
     }
 
-    res.json({
-      address: req.body.address,
-      signature: req.body.signature
-    })
+    try {
+      const response = await validateUtil.validateMessageSignature(req.body.address, req.body.signature)
+
+      if (response.registerStar) {
+        res.json(response)
+      } else {
+        res.status(401).json(response)
+      }
+    } catch (error) {
+      res.json({error: error.message})
+    }
+
   })
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -132,6 +142,7 @@ app.post('/block',
     check('star').not().isEmpty(),
   ], (req, res) => {
 
+    // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()})
