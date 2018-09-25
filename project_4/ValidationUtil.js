@@ -2,7 +2,7 @@
 const level = require('level')
 const chainDB = './starchaindata'
 const db = level(chainDB)
-const defaultWindow = 300
+const defaultWindow = 300 // five minutes
 
 // lib to validate
 const bitcoinMessage = require('bitcoinjs-message')
@@ -25,6 +25,21 @@ function isExpired (requestTimeStamp) {
 
 // Util file to manage validation/signature
 const validateUtil = {
+
+  // Check if signature is a signature valid
+  async isValidSignature (address) {
+    return db.get(address)
+      .then((value) => {
+        value = JSON.parse(value)
+        return value.messageSignature === 'valid'
+      })
+      .catch(() => {throw new Error('Not authorized')})
+  },
+
+  // Remove signature from leveldb
+  invalidateSignature (address) {
+    db.del(address)
+  },
 
   // CRITERION: User obtains a response in JSON format with a message to sign.
   saveRequestStarValidation: (address) => {
@@ -95,8 +110,13 @@ const validateUtil = {
         } else {
           let isValid = false
 
+          console.log(isExpired(value.requestTimeStamp))
+
+          // Check if request timeStamp is < that five minutes
           if (isExpired(value.requestTimeStamp)) {
+            // Set validation window to zero
             value.validationWindow = 0
+            // Inform expired validation message
             value.messageSignature = 'Validation expired!'
           } else {
             // CRITERION: The request must be configured with a limited validation window of five minutes.

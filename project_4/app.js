@@ -156,12 +156,27 @@ app.post('/block',
       }
       return true
     })
-  ], (req, res) => {
+  ], async (req, res) => {
 
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()})
+    }
+
+    try {
+      const isValid = await validateUtil.isValidSignature(req.body.address)
+
+      if (!isValid) {
+        throw new Error('Signature is not valid')
+      }
+    } catch (error) {
+      res.status(401).json({
+        status: 401,
+        message: error.message
+      })
+
+      return
     }
 
     // CRITERION: Star story must be encoded to hex before adding the block.
@@ -176,6 +191,7 @@ app.post('/block',
 
     blockchain.addBlock(new Block(block))
       .then(success => {
+        validateUtil.invalidateSignature(req.body.address)
         // Note: addBlock method was modified to return the block created
         res.status(201).send(success)
       }).catch(() => {
