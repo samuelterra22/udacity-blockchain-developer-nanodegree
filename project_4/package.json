@@ -1,10 +1,10 @@
 {
-  "name": "project_3",
+  "name": "project_4",
   "version": "1.0.0",
   "description": "RESTful web API for private blockchain.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava --verbose test/index.test.js"
   },
   "repository": {
     "type": "git",

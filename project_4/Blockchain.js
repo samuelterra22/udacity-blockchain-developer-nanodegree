@@ -46,7 +46,7 @@ class Blockchain {
     await this.addLevelDBData(newBlock.height, JSON.stringify(newBlock))
 
     // return the new block
-    return JSON.stringify(newBlock)
+    return newBlock
   }
 
   // Get block height
