@@ -145,14 +145,11 @@ app.post('/block',
       if (util.empty(star.story)) {
         return Promise.reject('Story is required')
       }
-      if (star.story.length > 250) {
-        return Promise.reject('Story is limited to 250 words')
+      if (star.story.length > 500) {
+        return Promise.reject('Story is limited to 500 words. Maximum size is 500 bytes')
       }
       if (!util.isASCII(star.story)) {
         return Promise.reject('Story contains non-ASCII symbols')
-      }
-      if (new Buffer(star.story).length > 500) {
-        return Promise.reject('Story too is long. Maximum size is 500 bytes')
       }
       return true
     })
@@ -165,6 +162,7 @@ app.post('/block',
     }
 
     try {
+      // Deny registration of a block if he/she did not send a valid signature
       const isValid = await validateUtil.isValidSignature(req.body.address)
 
       if (!isValid) {
@@ -181,6 +179,7 @@ app.post('/block',
 
     // CRITERION: Star story must be encoded to hex before adding the block.
     let star = req.body.star
+    // Encode the star story to hex here before making the block.
     star.story = new Buffer(req.body.star.story).toString('hex')
 
     // organize the block to create
@@ -191,7 +190,10 @@ app.post('/block',
 
     blockchain.addBlock(new Block(block))
       .then(success => {
+        // Override the previous request to prevent the user from placing additional blocks.
+        // He/she should return to request Validation and sign a new message in order to add another block.
         validateUtil.invalidateSignature(req.body.address)
+
         // Note: addBlock method was modified to return the block created
         res.status(201).send(success)
       }).catch(() => {
