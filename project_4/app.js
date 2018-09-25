@@ -7,11 +7,8 @@ const path = require('path')
 // import validator
 const {check, validationResult} = require('express-validator/check')
 
-// lib to validate
-const bitcoin = require('bitcoinjs-lib')
-const bitcoinMessage = require('bitcoinjs-message')
-
 const validateUtil = require('./ValidationUtil')
+const util = require('./util')
 
 const express = require('express')
 const app = express()
@@ -24,13 +21,6 @@ app.use(express.urlencoded({extended: false}))
 // URL post http://localhost:8000
 // Return the doc
 app.get('/', (req, res) => {
-
-  let address = '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ'
-  let signature = 'IJtpSFiOJrw/xYeucFxsHvIRFJ85YSGP8S1AEZxM4/obS3xr9iz7H0ffD7aM2vugrRaCi/zxaPtkflNzt5ykbc0='
-  let message = '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ:1532330740:starRegistry'
-
-  console.log(bitcoinMessage.verify(message, address, signature))
-
   res.sendFile(path.join(__dirname + '/README.md'))
 })
 //----------------------------------------------------------------------------------------------------------------------
@@ -139,7 +129,33 @@ app.post('/block',
     // address must be required
     check('address').not().isEmpty(),
     // star must be required
-    check('star').not().isEmpty(),
+    check('star').custom(star => {
+      // CRITERION: Star object and properties are stored within the body of the block.
+      // CRITERION: Star properties include the coordinates with encoded story.
+      // CRITERION: Star story supports ASCII text, limited to 250 words (500 bytes), and hex encoded.
+      if (util.empty(star)) {
+        return Promise.reject('Star object is required')
+      }
+      if (util.empty(star.ra)) {
+        return Promise.reject('Ra is required')
+      }
+      if (util.empty(star.dec)) {
+        return Promise.reject('Dec is required')
+      }
+      if (util.empty(star.story)) {
+        return Promise.reject('Story is required')
+      }
+      if (star.story.length > 250) {
+        return Promise.reject('Story is limited to 250 words')
+      }
+      if (!util.isASCII(star.story)) {
+        return Promise.reject('Story contains non-ASCII symbols')
+      }
+      if (new Buffer(star.story).length > 500) {
+        return Promise.reject('Story too is long. Maximum size is 500 bytes')
+      }
+      return true
+    })
   ], (req, res) => {
 
     // check data entries
