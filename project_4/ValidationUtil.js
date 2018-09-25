@@ -100,7 +100,6 @@ const validateUtil = {
         }
 
         value = JSON.parse(value)
-        console.log(value)
 
         if (value.messageSignature === 'valid') {
           return resolve({
@@ -109,8 +108,6 @@ const validateUtil = {
           })
         } else {
           let isValid = false
-
-          console.log(isExpired(value.requestTimeStamp))
 
           // Check if request timeStamp is < that five minutes
           if (isExpired(value.requestTimeStamp)) {
