@@ -11,6 +11,8 @@ const {check, validationResult} = require('express-validator/check')
 const bitcoin = require('bitcoinjs-lib')
 const bitcoinMessage = require('bitcoinjs-message')
 
+const validateUtil = require('./ValidationUtil')
+
 const express = require('express')
 const app = express()
 
@@ -40,14 +42,24 @@ app.post('/requestValidation',
   [
     // address must be required
     check('address').not().isEmpty(),
-  ], (req, res) => {
+  ], async (req, res) => {
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(422).json({errors: errors.array()})
     }
 
-    res.json({address: req.body.address})
+    let data = {}
+
+    try {
+      data = await validateUtil.getPendingAddress(req.body.address)
+    } catch (err) {
+      console.log(err)
+      data = await validateUtil.saveRequestValidation(req.body.address)
+    }
+
+    res.json(data)
+
   })
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -141,4 +153,3 @@ app.post('/block',
     })
   })
 //----------------------------------------------------------------------------------------------------------------------
-
