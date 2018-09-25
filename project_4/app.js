@@ -173,7 +173,7 @@ app.post('/block',
     blockchain.addBlock(new Block(block))
       .then(success => {
         // Note: addBlock method was modified to return the block created
-        res.json(success)
+        res.status(201).json(success)
       }).catch(() => {
       // return a message in json format with error
       res.json({error: 'There was an error generating a new block'})
