@@ -2,7 +2,7 @@
 const level = require('level')
 const chainDB = './starchaindata'
 const db = level(chainDB)
-const defaultWindow = 300
+const defaultWindow = 30
 
 // lib to validate
 const bitcoinMessage = require('bitcoinjs-message')
@@ -20,7 +20,7 @@ function generateMessage (address) {
 // Check if request time stamp of value has expired
 function isExpired (requestTimeStamp) {
   // time left < five minutes
-  return requestTimeStamp < Date.now() - (5 * 60 * 1000)
+  return requestTimeStamp < (Date.now() - (5 * 60 * 1000))
 }
 
 // Util file to manage validation/signature
@@ -65,7 +65,7 @@ const validateUtil = {
             message: value.message,
             requestTimeStamp: value.requestTimeStamp,
             // CRITERION: The request must be configured with a limited validation window of five minutes.
-            validationWindow: Math.floor((value.requestTimeStamp - Date.now() - (5 * 60 * 1000)) / 1000)
+            validationWindow: Math.floor((value.requestTimeStamp - (Date.now() - (5 * 60 * 1000))) / 1000)
           }
 
           resolve(data)
@@ -99,9 +99,11 @@ const validateUtil = {
             value.validationWindow = 0
             value.messageSignature = 'Validation expired!'
           } else {
-            value.validationWindow = Math.floor((value.requestTimeStamp - Date.now() - (5 * 60 * 1000)) / 1000)
+            // CRITERION: The request must be configured with a limited validation window of five minutes.
+            value.validationWindow = Math.floor((value.requestTimeStamp - (Date.now() - (5 * 60 * 1000))) / 1000)
 
             try {
+              // CRITERION: The application will validate their request and grant access to register a star.
               isValid = bitcoinMessage.verify(value.message, address, signature)
             } catch (error) {
               isValid = false
