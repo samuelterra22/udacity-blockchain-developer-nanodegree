@@ -108,4 +108,15 @@ http://localhost:8000/block/[HEIGHT]
 
 Curl example:
 ```
-curl "http://localhost:8000/block/1"```
+curl "http://localhost:8000/block/1"
+```
+
+## Udacity honor code
+
+Giving credits for places that helped me to do this project
+
+- Thanks  [Bruno Tomé](https://github.com/ibrunotome) and [Deepak Gupta](https://github.com/deepakmits) for the help with the doubts.
+- [Express Validator Doc](https://express-validator.github.io/docs/custom-validators-sanitizers.html)
+- https://stackoverflow.com/questions/1787939/check-time-difference-in-javascript
+- https://stackoverflow.com/questions/14313183/javascript-regex-how-do-i-check-if-the-string-is-ascii-only
+- https://stackoverflow.com/questions/9177598/multiple-instances-of-a-leveldb-database-at-the-same-time
