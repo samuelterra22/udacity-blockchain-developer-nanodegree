@@ -62,6 +62,30 @@ class Blockchain {
     return JSON.parse(await this.getLevelDBData(blockHeight))
   }
 
+  // get block by address
+  // CRITERION: Get endpoint with URL parameter for wallet address
+  async getBlocksByAddress (address) {
+    const blocks = []
+    let block
+
+    return new Promise((resolve, reject) => {
+      db.createReadStream().on('data', (data) => {
+        if (data.key !== 0) {
+          block = JSON.parse(data.value)
+
+          if (block.body.address === address) {
+            block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+            blocks.push(block)
+          }
+        }
+      }).on('error', (error) => {
+        return reject(error)
+      }).on('close', () => {
+        return resolve(blocks)
+      })
+    })
+  }
+
   // validate block
   // CRITERION: Modify the validateBlock() function to validate a block stored within levelDB
   async validateBlock (blockHeight) {
@@ -122,7 +146,7 @@ class Blockchain {
   getBlockHeightLevel () {
     return new Promise((resolve, reject) => {
       let height = -1
-      db.createReadStream().on('data', (data) => {
+      db.createReadStream().on('data', () => {
         height++
       }).on('error', (err) => {
         console.log('Unable to read data stream!', err)

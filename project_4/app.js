@@ -76,7 +76,11 @@ app.post('/message-signature/validate',
 // URL post http://localhost:8000/stars/address:address
 // Blockchain Wallet Address
 app.get('/stars/address:address', async (req, res) => {
-  res.json(req.params.address.slice(1))
+  blockchain.getBlocksByAddress(req.params.address.slice(1)).then(success => {
+    res.send(success)
+  }).catch(() => {
+    res.json({error: 'Block not found'})
+  })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
