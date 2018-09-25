@@ -112,7 +112,6 @@ app.get('/block/:blockHeight', (req, res) => {
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/block
 // Post block in blockchain - Star Registration Endpoint
-// Todo: validate start object
 app.post('/block',
   [
     // address must be required
