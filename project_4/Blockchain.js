@@ -58,8 +58,10 @@ class Blockchain {
   // get block
   // CRITERION: Modify getBlock() function to retrieve a block by it's block heigh within the LevelDB chain.
   async getBlock (blockHeight) {
-    // return object as a single string
-    return JSON.parse(await this.getLevelDBData(blockHeight))
+    let block = JSON.parse(await this.getLevelDBData(blockHeight))
+    block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+    // return object
+    return block
   }
 
   // get block by address
