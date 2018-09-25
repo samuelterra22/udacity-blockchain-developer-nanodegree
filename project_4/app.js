@@ -87,6 +87,7 @@ app.get('/stars/hash:hash', async (req, res) => {
 })
 
 //----------------------------------------------------------------------------------------------------------------------
+// DONE
 // URL get http://localhost:8000/block/{BLOCK_HEIGHT}
 // Star Block Height
 app.get('/block/:blockHeight', (req, res) => {
@@ -100,11 +101,14 @@ app.get('/block/:blockHeight', (req, res) => {
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/block
-// Post block in blockchain
+// Post block in blockchain - Star Registration Endpoint
+// Todo: validate start object
 app.post('/block',
   [
-    // body must be required
-    check('body').not().isEmpty(),
+    // address must be required
+    check('address').not().isEmpty(),
+    // star must be required
+    check('star').not().isEmpty(),
   ], (req, res) => {
 
     const errors = validationResult(req)
@@ -112,7 +116,13 @@ app.post('/block',
       return res.status(422).json({errors: errors.array()})
     }
 
-    blockchain.addBlock(new Block(req.body.body)).then(success => {
+    // organize the block to create
+    const block = {
+      address: req.body.address,
+      star: req.body.star
+    }
+
+    blockchain.addBlock(new Block(block)).then(success => {
       // Note: addBlock method was modified to return the block created
       res.json(success)
     }).catch(() => {
