@@ -132,7 +132,7 @@ const validateUtil = {
           db.put(address, JSON.stringify(value))
 
           return resolve({
-            registerStar: !isExpired && isValid,
+            registerStar: !isExpired(value.requestTimeStamp) && isValid,
             status: value
           })
         }
