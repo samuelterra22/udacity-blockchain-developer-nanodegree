@@ -164,10 +164,14 @@ app.post('/block',
       return res.status(422).json({errors: errors.array()})
     }
 
+    // CRITERION: Star story must be encoded to hex before adding the block.
+    let star = req.body.star
+    star.story = new Buffer(req.body.star.story).toString('hex')
+
     // organize the block to create
     const block = {
       address: req.body.address,
-      star: req.body.star
+      star: star
     }
 
     blockchain.addBlock(new Block(block))
