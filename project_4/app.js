@@ -7,6 +7,10 @@ const path = require('path')
 // import validator
 const {check, validationResult} = require('express-validator/check')
 
+// lib to validate
+const bitcoin = require('bitcoinjs-lib')
+const bitcoinMessage = require('bitcoinjs-message')
+
 const express = require('express')
 const app = express()
 
@@ -18,6 +22,13 @@ app.use(express.urlencoded({extended: false}))
 // URL post http://localhost:8000
 // Return the doc
 app.get('/', (req, res) => {
+
+  let address = '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ'
+  let signature = 'IJtpSFiOJrw/xYeucFxsHvIRFJ85YSGP8S1AEZxM4/obS3xr9iz7H0ffD7aM2vugrRaCi/zxaPtkflNzt5ykbc0='
+  let message = '142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ:1532330740:starRegistry'
+
+  console.log(bitcoinMessage.verify(message, address, signature))
+
   res.sendFile(path.join(__dirname + '/README.md'))
 })
 //----------------------------------------------------------------------------------------------------------------------
@@ -69,8 +80,15 @@ app.get('/stars/address:address', async (req, res) => {
 })
 
 //----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/stars/hash:hash
+// Star Block Hash
+app.get('/stars/hash:hash', async (req, res) => {
+  res.json(req.params.hash.slice(1))
+})
+
+//----------------------------------------------------------------------------------------------------------------------
 // URL get http://localhost:8000/block/{BLOCK_HEIGHT}
-// Get block height
+// Star Block Height
 app.get('/block/:blockHeight', (req, res) => {
   blockchain.getBlock(req.params.blockHeight).then(success => {
     // The block contents must respond to GET request with block contents in JSON format
