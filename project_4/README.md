@@ -120,3 +120,11 @@ Giving credits for places that helped me to do this project
 - https://stackoverflow.com/questions/1787939/check-time-difference-in-javascript
 - https://stackoverflow.com/questions/14313183/javascript-regex-how-do-i-check-if-the-string-is-ascii-only
 - https://stackoverflow.com/questions/9177598/multiple-instances-of-a-leveldb-database-at-the-same-time
+
+#### Extra: Project best practices
+
+- [https://www.terlici.com/2014/08/25/best-practices-express-structure.html](https://www.terlici.com/2014/08/25/best-practices-express-structure.html)
+- [https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
+- [https://github.com/i0natan/nodebestpractices](https://github.com/i0natan/nodebestpractices)
+- [https://stackoverflow.com/questions/5178334/folder-structure-for-a-node-js-project](https://stackoverflow.com/questions/5178334/folder-structure-for-a-node-js-project)
+- [https://gist.github.com/lancejpollard/1398757](https://gist.github.com/lancejpollard/1398757)

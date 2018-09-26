@@ -1,5 +1,5 @@
 // import dependencies
-const Blockchain = require('./libs/Blockchain')
+const Blockchain = require('./helpers/Blockchain')
 const blockchain = new Blockchain()
 const Block = require('./models/Block')
 const path = require('path')
@@ -7,8 +7,8 @@ const path = require('path')
 // import validator
 const {check, validationResult} = require('express-validator/check')
 
-const validateUtil = require('./libs/ValidationUtil')
-const util = require('./libs/util')
+const validateUtil = require('./helpers/ValidationUtil')
+const util = require('./helpers/util')
 
 const express = require('express')
 const app = express()
