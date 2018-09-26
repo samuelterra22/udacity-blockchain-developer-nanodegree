@@ -59,7 +59,11 @@ class Blockchain {
   // CRITERION: Modify getBlock() function to retrieve a block by it's block heigh within the LevelDB chain.
   async getBlock (blockHeight) {
     let block = JSON.parse(await this.getLevelDBData(blockHeight))
-    block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+
+    // verify if ins't the Genesis block
+    if (parseInt(block.height) > 0) {
+      block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+    }
     // return object
     return block
   }

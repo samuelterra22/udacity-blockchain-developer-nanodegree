@@ -211,7 +211,7 @@ app.post('/block',
 
         // Note: addBlock method was modified to return the block created
         res.status(201).send(success)
-      }).catch(() => {
+      }).catch((err) => {
       // return a message in json format with error
       res.json({error: 'There was an error generating a new block'})
     })
