@@ -1,6 +1,6 @@
 // Configure LevelDB to access stars data
 const level = require('level')
-const chainDB = './starchaindata'
+const chainDB = './databases/starchaindata'
 const db = level(chainDB)
 const defaultWindow = 300 // five minutes
 

@@ -1,19 +1,19 @@
 // import dependencies
-const Blockchain = require('./Blockchain')
+const Blockchain = require('./libs/Blockchain')
 const blockchain = new Blockchain()
-const Block = require('./Block')
+const Block = require('./models/Block')
 const path = require('path')
 
 // import validator
 const {check, validationResult} = require('express-validator/check')
 
-const validateUtil = require('./ValidationUtil')
-const util = require('./util')
+const validateUtil = require('./libs/ValidationUtil')
+const util = require('./libs/util')
 
 const express = require('express')
 const app = express()
 
-app.listen(8000, () => console.log('App listening on port 8000!'))
+app.listen(8000, () => console.log('Server started and listening on port 8000!'))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
@@ -21,7 +21,10 @@ app.use(express.urlencoded({extended: false}))
 // URL post http://localhost:8000
 // Return the doc
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/README.md'))
+  res.status(404).json({
+    status: 404,
+    message: 'Route not found. Check documentation.'
+  })
 })
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -79,7 +82,10 @@ app.post('/message-signature/validate',
         res.status(401).json(response)
       }
     } catch (error) {
-      res.json({error: error.message})
+      res.status(404).json({
+        status: 404,
+        message: error.message
+      })
     }
 
   })
@@ -92,7 +98,10 @@ app.get('/stars/address:address', async (req, res) => {
     .then(success => {
       res.send(success)
     }).catch(() => {
-    res.json({error: 'Block not found'})
+    res.status(404).json({
+      status: 404,
+      message: 'Block not found'
+    })
   })
 })
 
@@ -104,7 +113,10 @@ app.get('/stars/hash:hash', async (req, res) => {
     .then(success => {
       res.send(success)
     }).catch(() => {
-    res.json({error: 'Block not found'})
+    res.status(404).json({
+      status: 404,
+      message: 'Block not found'
+    })
   })
 })
 
@@ -117,7 +129,10 @@ app.get('/block/:blockHeight', (req, res) => {
       // The block contents must respond to GET request with block contents in JSON format
       res.json(success)
     }).catch(error => {
-    res.json(error)
+    res.status(404).json({
+      status: 404,
+      message: 'Block not found'
+    })
   })
 })
 

@@ -1,4 +1,4 @@
-node_modules/
 .idea/
-chaindata/
-starchaindata/
+node_modules/
+databases/chaindata/
+databases/starchaindata/

@@ -6,11 +6,11 @@ const SHA256 = require('crypto-js/sha256')
 
 // Configure LevelDB to persist blockchain data
 const level = require('level')
-const chainDB = './chaindata'
+const chainDB = './databases/chaindata'
 const db = level(chainDB)
 
 // import block class
-const Block = require('./Block')
+const Block = require('../models/Block')
 
 /* ===== Blockchain Class ==========================
 |  Class with a constructor for new blockchain 		|
