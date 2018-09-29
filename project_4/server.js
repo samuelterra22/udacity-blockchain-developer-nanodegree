@@ -206,8 +206,7 @@ app.post('/block',
     })
   })
 //----------------------------------------------------------------------------------------------------------------------
-// URL post http://localhost:8000
-// Return the doc
+// Send 404 erro, route not found
 app.get('*', (req, res) => {
   res.status(404).json({
     status: 404,
