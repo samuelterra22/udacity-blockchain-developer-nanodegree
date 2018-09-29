@@ -18,17 +18,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 //----------------------------------------------------------------------------------------------------------------------
-// URL post http://localhost:8000
-// Return the doc
-app.get('/', (req, res) => {
-  res.status(404).json({
-    status: 404,
-    message: 'Route not found. Check documentation.'
-  })
-})
-//----------------------------------------------------------------------------------------------------------------------
-
-//----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/requestValidation
 // Validate User Request
 app.post('/requestValidation',
@@ -216,4 +205,13 @@ app.post('/block',
       res.json({error: 'There was an error generating a new block'})
     })
   })
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000
+// Return the doc
+app.get('*', (req, res) => {
+  res.status(404).json({
+    status: 404,
+    message: 'Route not found. Check documentation.'
+  })
+})
 //----------------------------------------------------------------------------------------------------------------------
