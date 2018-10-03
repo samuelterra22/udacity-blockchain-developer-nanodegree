@@ -2,30 +2,35 @@
 const Blockchain = require('./helpers/Blockchain')
 const blockchain = new Blockchain()
 const Block = require('./models/Block')
-const path = require('path')
 
 // import validator
 const {check, validationResult} = require('express-validator/check')
 
+// import util libs
 const validateUtil = require('./helpers/ValidationUtil')
 const util = require('./helpers/util')
 
 const express = require('express')
 const app = express()
 
-app.listen(8000, () => console.log('Server started and listening on port 8000!'))
+app.listen(8000, () =>
+  console.log('Server started and listening on port 8000!')
+)
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/requestValidation
 // Validate User Request
-app.post('/requestValidation',
+app.post(
+  '/requestValidation',
   [
     // address must be required
-    check('address').not().isEmpty(),
-  ], async (req, res) => {
-
+    check('address')
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -42,20 +47,25 @@ app.post('/requestValidation',
     }
 
     res.json(data)
-
-  })
+  }
+)
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/message-signature/validate
 // Allow User Message Signature
-app.post('/message-signature/validate',
+app.post(
+  '/message-signature/validate',
   [
     // address must be required
-    check('address').not().isEmpty(),
+    check('address')
+      .not()
+      .isEmpty(),
     // signature must be required
-    check('signature').not().isEmpty(),
-  ], async (req, res) => {
-
+    check('signature')
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -63,7 +73,10 @@ app.post('/message-signature/validate',
     }
 
     try {
-      const response = await validateUtil.validateMessageSignature(req.body.address, req.body.signature)
+      const response = await validateUtil.validateMessageSignature(
+        req.body.address,
+        req.body.signature
+      )
 
       if (response.registerStar) {
         res.json(response)
@@ -76,62 +89,71 @@ app.post('/message-signature/validate',
         message: error.message
       })
     }
-
-  })
+  }
+)
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/stars/address:address
 // Blockchain Wallet Address
 app.get('/stars/address:address', async (req, res) => {
-  blockchain.getBlocksByAddress(req.params.address.slice(1))
+  blockchain
+    .getBlocksByAddress(req.params.address.slice(1))
     .then(success => {
       res.send(success)
-    }).catch(() => {
-    res.status(404).json({
-      status: 404,
-      message: 'Block not found'
     })
-  })
+    .catch(() => {
+      res.status(404).json({
+        status: 404,
+        message: 'Block not found'
+      })
+    })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/stars/hash:hash
 // Star Block Hash
 app.get('/stars/hash:hash', async (req, res) => {
-  blockchain.getBlockByHash(req.params.hash.slice(1))
+  blockchain
+    .getBlockByHash(req.params.hash.slice(1))
     .then(success => {
       res.send(success)
-    }).catch(() => {
-    res.status(404).json({
-      status: 404,
-      message: 'Block not found'
     })
-  })
+    .catch(() => {
+      res.status(404).json({
+        status: 404,
+        message: 'Block not found'
+      })
+    })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL get http://localhost:8000/block/{BLOCK_HEIGHT}
 // Star Block Height
 app.get('/block/:blockHeight', (req, res) => {
-  blockchain.getBlock(req.params.blockHeight)
+  blockchain
+    .getBlock(req.params.blockHeight)
     .then(success => {
       // The block contents must respond to GET request with block contents in JSON format
       res.json(success)
-    }).catch(error => {
-    res.status(404).json({
-      status: 404,
-      message: 'Block not found'
     })
-  })
+    .catch(() => {
+      res.status(404).json({
+        status: 404,
+        message: 'Block not found'
+      })
+    })
 })
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/block
 // Post block in blockchain - Star Registration Endpoint
-app.post('/block',
+app.post(
+  '/block',
   [
     // address must be required
-    check('address').not().isEmpty(),
+    check('address')
+      .not()
+      .isEmpty(),
     // star must be required
     check('star').custom(star => {
       // CRITERION: Star object and properties are stored within the body of the block.
@@ -150,15 +172,17 @@ app.post('/block',
         return Promise.reject('Story is required')
       }
       if (star.story.length > 500) {
-        return Promise.reject('Story is limited to 500 words. Maximum size is 500 bytes')
+        return Promise.reject(
+          'Story is limited to 500 words. Maximum size is 500 bytes'
+        )
       }
       if (!util.isASCII(star.story)) {
         return Promise.reject('Story contains non-ASCII symbols')
       }
       return true
     })
-  ], async (req, res) => {
-
+  ],
+  async (req, res) => {
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -184,7 +208,7 @@ app.post('/block',
     // CRITERION: Star story must be encoded to hex before adding the block.
     let star = req.body.star
     // Encode the star story to hex here before making the block.
-    star.story = new Buffer(req.body.star.story).toString('hex')
+    star.story = Buffer.from(req.body.star.story).toString('hex')
 
     // organize the block to create
     const block = {
@@ -192,7 +216,8 @@ app.post('/block',
       star: star
     }
 
-    blockchain.addBlock(new Block(block))
+    blockchain
+      .addBlock(new Block(block))
       .then(success => {
         // Override the previous request to prevent the user from placing additional blocks.
         // He/she should return to request Validation and sign a new message in order to add another block.
@@ -200,11 +225,13 @@ app.post('/block',
 
         // Note: addBlock method was modified to return the block created
         res.status(201).send(success)
-      }).catch((err) => {
-      // return a message in json format with error
-      res.json({error: 'There was an error generating a new block'})
-    })
-  })
+      })
+      .catch(() => {
+        // return a message in json format with error
+        res.json({error: 'There was an error generating a new block'})
+      })
+  }
+)
 //----------------------------------------------------------------------------------------------------------------------
 // Send 404 erro, route not found
 app.get('*', (req, res) => {

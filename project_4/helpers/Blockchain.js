@@ -9,6 +9,9 @@ const level = require('level')
 const chainDB = './databases/chaindata'
 const db = level(chainDB)
 
+// import util libs
+const util = require('./util')
+
 // import block class
 const Block = require('../models/Block')
 
@@ -19,9 +22,12 @@ const Block = require('../models/Block')
 class Blockchain {
   constructor () {
     // CRITERION: Genesis block persist as the first block in the blockchain using LevelDB.
-    this.getBlockHeight().then((height) => {
+    this.getBlockHeight().then(height => {
       // console.log(height)  // DEBUG
-      if (height === -1) this.addBlock(new Block('Genesis block')).then(() => console.log('Genesis block stored!'))
+      if (height === -1)
+        this.addBlock(new Block('Genesis block')).then(() =>
+          console.log('Genesis block stored!')
+        )
     })
   }
 
@@ -33,7 +39,10 @@ class Blockchain {
     // Block height
     newBlock.height = previousBlockHeight + 1
     // UTC timestamp
-    newBlock.time = new Date().getTime().toString().slice(0, -3)
+    newBlock.time = new Date()
+      .getTime()
+      .toString()
+      .slice(0, -3)
     // previous block hash
     if (newBlock.height > 0) {
       let previousBlock = await this.getBlock(previousBlockHeight)
@@ -62,7 +71,10 @@ class Blockchain {
 
     // verify if ins't the Genesis block
     if (parseInt(block.height) > 0) {
-      block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
+      block.body.star.storyDecoded = Buffer.from(
+        block.body.star.story,
+        'hex'
+      ).toString()
     }
     // return object
     return block
@@ -72,48 +84,60 @@ class Blockchain {
   // CRITERION: Get endpoint with URL parameter for wallet address
   async getBlocksByAddress (address) {
     const blocks = []
-    let block
+    let block = {}
 
     return new Promise((resolve, reject) => {
-      db.createReadStream().on('data', (data) => {
-        if (data.key !== 0) {
-          block = JSON.parse(data.value)
+      db.createReadStream()
+        .on('data', data => {
+          if (data.key !== 0) {
+            block = JSON.parse(data.value)
 
-          if (block.body.address === address) {
-            block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
-            blocks.push(block)
+            if (block.body.address === address) {
+              block.body.star.storyDecoded = Buffer.from(
+                block.body.star.story,
+                'hex'
+              ).toString()
+              blocks.push(block)
+            }
           }
-        }
-      }).on('error', (error) => {
-        return reject(error)
-      }).on('close', () => {
-        return resolve(blocks)
-      })
+        })
+        .on('error', error => {
+          return reject(error)
+        })
+        .on('close', () => {
+          return resolve(blocks)
+        })
     })
   }
 
   // get block by address
   // CRITERION: Get endpoint with URL parameter for star block hash JSON Response
   async getBlockByHash (hash) {
-    let block
+    let block = {}
 
     return new Promise((resolve, reject) => {
-      db.createReadStream().on('data', (data) => {
-        block = JSON.parse(data.value)
+      db.createReadStream()
+        .on('data', data => {
+          block = JSON.parse(data.value)
 
-        if (block.hash === hash) {
-          if (data.key !== 0) {
-            block.body.star.storyDecoded = new Buffer(block.body.star.story, 'hex').toString()
-            return resolve(block)
-          } else {
-            return resolve(block)
+          if (util.isStringChainEquals(block.hash, hash)) {
+            if (data.key !== 0) {
+              block.body.star.storyDecoded = Buffer.from(
+                block.body.star.story,
+                'hex'
+              ).toString()
+              return resolve(block)
+            } else {
+              return resolve(block)
+            }
           }
-        }
-      }).on('error', (error) => {
-        return reject(error)
-      }).on('close', () => {
-        return reject('Block not found')
-      })
+        })
+        .on('error', error => {
+          return reject(error)
+        })
+        .on('close', () => {
+          return reject('Block not found')
+        })
     })
   }
 
@@ -135,7 +159,14 @@ class Blockchain {
       // return true if block is valid
       return true
     } else {
-      console.log('Block #' + blockHeight + ' invalid hash:\n' + blockHash + '<>' + validBlockHash)
+      console.log(
+        'Block #' +
+        blockHeight +
+        ' invalid hash:\n' +
+        blockHash +
+        '<>' +
+        validBlockHash
+      )
       return false
     }
   }
@@ -147,7 +178,6 @@ class Blockchain {
     let blockChainHeight = await this.getBlockHeight()
 
     for (let i = 0; i < blockChainHeight; i++) {
-
       // validate a single block
       if (!this.validateBlock(i)) errorLog.push(i)
 
@@ -157,7 +187,6 @@ class Blockchain {
       if (blockHash !== previousHash) {
         errorLog.push(i)
       }
-
     }
 
     if (errorLog.length > 0) {
@@ -166,7 +195,6 @@ class Blockchain {
     } else {
       console.log('No errors detected')
     }
-
   }
 
   /* ===== level db methods =====================================
@@ -177,27 +205,29 @@ class Blockchain {
   getBlockHeightLevel () {
     return new Promise((resolve, reject) => {
       let height = -1
-      db.createReadStream().on('data', () => {
-        height++
-      }).on('error', (err) => {
-        console.log('Unable to read data stream!', err)
-        reject(err)
-      }).on('close', () => {
-        // console.log('Blockchain height is #' + height) // DEBUG
-        resolve(height)
-      })
+      db.createReadStream()
+        .on('data', () => {
+          height++
+        })
+        .on('error', err => {
+          console.log('Unable to read data stream!', err)
+          reject(err)
+        })
+        .on('close', () => {
+          // console.log('Blockchain height is #' + height) // DEBUG
+          resolve(height)
+        })
     })
   }
 
   // Add data to levelDB with key/value pair
   addLevelDBData (key, value) {
     return new Promise((resolve, reject) => {
-      db.put(key, value, (err) => {
+      db.put(key, value, err => {
         if (err) {
           console.log('Block ' + key + ' submission failed', err)
           reject(err)
-        }
-        else {
+        } else {
           console.log('Block #' + key + ' stored')
           resolve(value)
         }
@@ -219,7 +249,6 @@ class Blockchain {
       })
     })
   }
-
 }
 
 module.exports = Blockchain

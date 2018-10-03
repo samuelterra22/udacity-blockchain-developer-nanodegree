@@ -4,6 +4,8 @@
   "description": "RESTful web API for private blockchain.",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ext .js --ignore-path .gitignore .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,12 +35,19 @@
     "level": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^5.6.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.6.1",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.24.1",
     "eslint-plugin-mocha": "^5.2.0",
     "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-security": "^1.4.0"
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-security": "^1.4.0",
+    "prettier": "^1.14.3"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.12.0"
   }
 }

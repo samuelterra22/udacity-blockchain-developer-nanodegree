@@ -4,36 +4,52 @@ const chainDB = './databases/starchaindata'
 const db = level(chainDB)
 const defaultWindow = 300 // five minutes
 
-// lib to validate
+// lib to validate message
 const bitcoinMessage = require('bitcoinjs-message')
 
-// Return current time
+/**
+ * Return current time.
+ *
+ * @returns {int} Return current timestamp
+ * */
 function getCurrentTimeStamp () {
   return new Date().getTime()
 }
 
-// CRITERION: Message format = [walletAddress]:[timeStamp]:starRegistry
+/**
+ * Return the message created.
+ * @param {String} address The address
+ *
+ * @returns {String} Return message with format [walletAddress]:[timeStamp]:starRegistry
+ * */
 function generateMessage (address) {
   return `${address}:${getCurrentTimeStamp()}:starRegistry`
 }
 
-// Check if request time stamp of value has expired
+/**
+ * Check if request time stamp of value has expired.
+ * @param {String} requestTimeStamp The timestamp from request
+ *
+ * @returns {Boolean} Return true if the timestamp from request is minus that five minutes
+ * */
 function isExpired (requestTimeStamp) {
   // time left < five minutes
-  return requestTimeStamp < (Date.now() - (5 * 60 * 1000))
+  return requestTimeStamp < Date.now() - 5 * 60 * 1000
 }
 
 // Util file to manage validation/signature
 const validateUtil = {
-
   // Check if signature is a signature valid
   async isValidSignature (address) {
-    return db.get(address)
-      .then((value) => {
+    return db
+      .get(address)
+      .then(value => {
         value = JSON.parse(value)
         return value.messageSignature === 'valid'
       })
-      .catch(() => {throw new Error('Not authorized')})
+      .catch(() => {
+        throw new Error('Not authorized')
+      })
   },
 
   // Remove signature from leveldb
@@ -42,7 +58,7 @@ const validateUtil = {
   },
 
   // CRITERION: User obtains a response in JSON format with a message to sign.
-  saveRequestStarValidation: (address) => {
+  saveRequestStarValidation: address => {
     const message = generateMessage(address)
 
     // CRITERION: Response should contain message details, request timestamp, and time remaining for validation window.
@@ -80,7 +96,9 @@ const validateUtil = {
             message: value.message,
             requestTimeStamp: value.requestTimeStamp,
             // CRITERION: The request must be configured with a limited validation window of five minutes.
-            validationWindow: Math.floor((value.requestTimeStamp - (Date.now() - (5 * 60 * 1000))) / 1000)
+            validationWindow: Math.floor(
+              (value.requestTimeStamp - (Date.now() - 5 * 60 * 1000)) / 1000
+            )
           }
 
           resolve(data)
@@ -117,7 +135,9 @@ const validateUtil = {
             value.messageSignature = 'Validation expired!'
           } else {
             // CRITERION: The request must be configured with a limited validation window of five minutes.
-            value.validationWindow = Math.floor((value.requestTimeStamp - (Date.now() - (5 * 60 * 1000))) / 1000)
+            value.validationWindow = Math.floor(
+              (value.requestTimeStamp - (Date.now() - 5 * 60 * 1000)) / 1000
+            )
 
             try {
               // CRITERION: The application will validate their request and grant access to register a star.
@@ -139,7 +159,6 @@ const validateUtil = {
       })
     })
   }
-
 }
 
 module.exports = validateUtil

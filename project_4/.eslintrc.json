@@ -1,14 +1,32 @@
 {
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest/globals": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": true,
+    "ecmaVersion": 2018
+  },
   "extends": [
     "eslint:recommended",
     "plugin:node/recommended",
-    "plugin:security/recommended"
+    "plugin:security/recommended",
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
   ],
   "plugins": [
     "mocha",
-    "security"
+    "security",
+    "jest"
   ],
   "rules": {
+    "no-control-regex": 0,
     "mocha/no-exclusive-tests": "error",
     "node/exports-style": [
       "error",
@@ -33,6 +51,42 @@
     "node/prefer-global/url": [
       "error",
       "always"
+    ],
+    "semi": [
+      2,
+      "never"
+    ],
+    "no-console": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false
+      }
+    ],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
+    "valid-jsdoc": [
+      2,
+      {
+        "prefer": {
+          "return": "returns"
+        }
+      }
+    ],
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        }
+      }
     ]
   }
 }
