@@ -13,6 +13,12 @@ You'll do this using skills you've learn throughout the program, and by solving 
 
 For the development of the project we used the [Express framework](https://expressjs.com/).
 
+## See project code documentation
+
+```
+npm run esdoc:open
+```
+
 ## Getting Started
 
 ```
