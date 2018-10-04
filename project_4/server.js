@@ -4,7 +4,7 @@ const blockchain = new Blockchain()
 const Block = require('./models/Block')
 
 // import validator
-const {check, validationResult} = require('express-validator/check')
+const { check, validationResult } = require('express-validator/check')
 
 // import util libs
 const validateUtil = require('./helpers/ValidationUtil')
@@ -13,11 +13,10 @@ const util = require('./helpers/util')
 const express = require('express')
 const app = express()
 
-app.listen(8000, () =>
-  console.log('Server started and listening on port 8000!')
-)
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
+
+app.listen(8000, () => console.log('Server started and listening on port 8000!'))
 
 //----------------------------------------------------------------------------------------------------------------------
 // URL post http://localhost:8000/requestValidation
@@ -34,7 +33,7 @@ app.post(
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(422).json({errors: errors.array()})
+      return res.status(422).json({ errors: errors.array() })
     }
 
     let data = {}
@@ -69,7 +68,7 @@ app.post(
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(422).json({errors: errors.array()})
+      return res.status(422).json({ errors: errors.array() })
     }
 
     try {
@@ -172,9 +171,7 @@ app.post(
         return Promise.reject('Story is required')
       }
       if (star.story.length > 500) {
-        return Promise.reject(
-          'Story is limited to 500 words. Maximum size is 500 bytes'
-        )
+        return Promise.reject('Story is limited to 500 words. Maximum size is 500 bytes')
       }
       if (!util.isASCII(star.story)) {
         return Promise.reject('Story contains non-ASCII symbols')
@@ -186,7 +183,7 @@ app.post(
     // check data entries
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(422).json({errors: errors.array()})
+      return res.status(422).json({ errors: errors.array() })
     }
 
     try {
@@ -228,7 +225,7 @@ app.post(
       })
       .catch(() => {
         // return a message in json format with error
-        res.json({error: 'There was an error generating a new block'})
+        res.json({ error: 'There was an error generating a new block' })
       })
   }
 )

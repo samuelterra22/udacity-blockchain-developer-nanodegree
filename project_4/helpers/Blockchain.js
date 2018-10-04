@@ -25,9 +25,7 @@ class Blockchain {
     this.getBlockHeight().then(height => {
       // console.log(height)  // DEBUG
       if (height === -1)
-        this.addBlock(new Block('Genesis block')).then(() =>
-          console.log('Genesis block stored!')
-        )
+        this.addBlock(new Block('Genesis block')).then(() => console.log('Genesis block stored!'))
     })
   }
 
@@ -71,10 +69,7 @@ class Blockchain {
 
     // verify if ins't the Genesis block
     if (parseInt(block.height) > 0) {
-      block.body.star.storyDecoded = Buffer.from(
-        block.body.star.story,
-        'hex'
-      ).toString()
+      block.body.star.storyDecoded = Buffer.from(block.body.star.story, 'hex').toString()
     }
     // return object
     return block
@@ -93,10 +88,7 @@ class Blockchain {
             block = JSON.parse(data.value)
 
             if (block.body.address === address) {
-              block.body.star.storyDecoded = Buffer.from(
-                block.body.star.story,
-                'hex'
-              ).toString()
+              block.body.star.storyDecoded = Buffer.from(block.body.star.story, 'hex').toString()
               blocks.push(block)
             }
           }
@@ -122,10 +114,7 @@ class Blockchain {
 
           if (util.isStringChainEquals(block.hash, hash)) {
             if (data.key !== 0) {
-              block.body.star.storyDecoded = Buffer.from(
-                block.body.star.story,
-                'hex'
-              ).toString()
+              block.body.star.storyDecoded = Buffer.from(block.body.star.story, 'hex').toString()
               return resolve(block)
             } else {
               return resolve(block)
@@ -159,14 +148,7 @@ class Blockchain {
       // return true if block is valid
       return true
     } else {
-      console.log(
-        'Block #' +
-        blockHeight +
-        ' invalid hash:\n' +
-        blockHash +
-        '<>' +
-        validBlockHash
-      )
+      console.log('Block #' + blockHeight + ' invalid hash:\n' + blockHash + '<>' + validBlockHash)
       return false
     }
   }
