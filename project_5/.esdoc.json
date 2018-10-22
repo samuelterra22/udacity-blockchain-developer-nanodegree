@@ -1,0 +1,75 @@
+{
+  "source": "./",
+  "destination": "./docs",
+  "package.json": "./package.json",
+  "includes": [
+    "\\.js$"
+  ],
+  "excludes": [
+    "doc/*",
+    "node_modules/*"
+  ],
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "lint": {
+          "enable": true
+        },
+        "coverage": {
+          "enable": true
+        },
+        "accessor": {
+          "access": [
+            "public",
+            "protected",
+            "private"
+          ],
+          "autoPrivate": true
+        },
+        "undocumentIdentifier": {
+          "enable": true
+        },
+        "unexportedIdentifier": {
+          "enable": false
+        },
+        "typeInference": {
+          "enable": true
+        }
+      }
+    },
+    {
+      "name": "esdoc-lint-plugin",
+      "option": {
+        "enable": true
+      }
+    },
+    {
+      "name": "esdoc-coverage-plugin",
+      "option": {
+        "enable": true,
+        "kind": [
+          "class",
+          "method",
+          "member",
+          "get",
+          "set",
+          "constructor",
+          "function",
+          "variable"
+        ]
+      }
+    },
+    {
+      "name": "esdoc-brand-plugin",
+      "option": {
+        "title": "My Library",
+        "description": "this is awesome library",
+        "repository": "https://github.com/foo/bar",
+        "site": "http://my-library.org",
+        "author": "https://twitter.com/foo",
+        "image": "http://my-library.org/logo.png"
+      }
+    }
+  ]
+}

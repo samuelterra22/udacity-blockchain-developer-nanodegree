@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">project_4/server.js | My Library</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+  <meta name="description" content="this is awesome library">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://my-library.org">
+  <meta property="og:site_name" content="My Library">
+  <meta property="og:title" content="My Library">
+  <meta property="og:image" content="http://my-library.org/logo.png">
+  <meta property="og:description" content="this is awesome library">
+  <meta property="og:author" content="https://twitter.com/foo">
+  <meta property="twitter:card" content="summary">
+  <meta property="twitter:title" content="My Library">
+  <meta property="twitter:description" content="this is awesome library">
+  <meta property="twitter:image" content="http://my-library.org/logo.png">
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+  <a style="position:relative; top:3px;" href="https://github.com/foo/bar"><img width="20px"
+                                                                                src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav">
+  <div>
+    <ul>
+
+    </ul>
+  </div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">project_4/server.js</h1>
+  <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// import dependencies
+const Blockchain = require(&apos;./helpers/Blockchain&apos;)
+const blockchain = new Blockchain()
+const Block = require(&apos;./models/Block&apos;)
+
+// import validator
+const { check, validationResult } = require(&apos;express-validator/check&apos;)
+
+// import util libs
+const validateUtil = require(&apos;./helpers/ValidationUtil&apos;)
+const util = require(&apos;./helpers/util&apos;)
+
+const express = require(&apos;express&apos;)
+const app = express()
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+app.listen(8000, () =&gt; console.log(&apos;Server started and listening on port 8000!&apos;))
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/requestValidation
+// Validate User Request
+app.post(
+  &apos;/requestValidation&apos;,
+  [
+    // address must be required
+    check(&apos;address&apos;)
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) =&gt; {
+    // check data entries
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
+
+    let data = {}
+
+    try {
+      data = await validateUtil.getPendingAddress(req.body.address)
+    } catch (err) {
+      console.log(err)
+      data = await validateUtil.saveRequestStarValidation(req.body.address)
+    }
+
+    res.json(data)
+  }
+)
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/message-signature/validate
+// Allow User Message Signature
+app.post(
+  &apos;/message-signature/validate&apos;,
+  [
+    // address must be required
+    check(&apos;address&apos;)
+      .not()
+      .isEmpty(),
+    // signature must be required
+    check(&apos;signature&apos;)
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) =&gt; {
+    // check data entries
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
+
+    try {
+      const response = await validateUtil.validateMessageSignature(
+        req.body.address,
+        req.body.signature
+      )
+
+      if (response.registerStar) {
+        res.json(response)
+      } else {
+        res.status(401).json(response)
+      }
+    } catch (error) {
+      res.status(404).json({
+        status: 404,
+        message: error.message
+      })
+    }
+  }
+)
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/stars/address:address
+// Blockchain Wallet Address
+app.get(&apos;/stars/address:address&apos;, async (req, res) =&gt; {
+  blockchain
+    .getBlocksByAddress(req.params.address.slice(1))
+    .then(success =&gt; {
+      res.send(success)
+    })
+    .catch(() =&gt; {
+      res.status(404).json({
+        status: 404,
+        message: &apos;Block not found&apos;
+      })
+    })
+})
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/stars/hash:hash
+// Star Block Hash
+app.get(&apos;/stars/hash:hash&apos;, async (req, res) =&gt; {
+  blockchain
+    .getBlockByHash(req.params.hash.slice(1))
+    .then(success =&gt; {
+      res.send(success)
+    })
+    .catch(() =&gt; {
+      res.status(404).json({
+        status: 404,
+        message: &apos;Block not found&apos;
+      })
+    })
+})
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL get http://localhost:8000/block/{BLOCK_HEIGHT}
+// Star Block Height
+app.get(&apos;/block/:blockHeight&apos;, (req, res) =&gt; {
+  blockchain
+    .getBlock(req.params.blockHeight)
+    .then(success =&gt; {
+      // The block contents must respond to GET request with block contents in JSON format
+      res.json(success)
+    })
+    .catch(() =&gt; {
+      res.status(404).json({
+        status: 404,
+        message: &apos;Block not found&apos;
+      })
+    })
+})
+
+//----------------------------------------------------------------------------------------------------------------------
+// URL post http://localhost:8000/block
+// Post block in blockchain - Star Registration Endpoint
+app.post(
+  &apos;/block&apos;,
+  [
+    // address must be required
+    check(&apos;address&apos;)
+      .not()
+      .isEmpty(),
+    // star must be required
+    check(&apos;star&apos;).custom(star =&gt; {
+      // CRITERION: Star object and properties are stored within the body of the block.
+      // CRITERION: Star properties include the coordinates with encoded story.
+      // CRITERION: Star story supports ASCII text, limited to 250 words (500 bytes), and hex encoded.
+      if (util.empty(star)) {
+        return Promise.reject(&apos;Star object is required&apos;)
+      }
+      if (util.empty(star.ra)) {
+        return Promise.reject(&apos;Ra is required&apos;)
+      }
+      if (util.empty(star.dec)) {
+        return Promise.reject(&apos;Dec is required&apos;)
+      }
+      if (util.empty(star.story)) {
+        return Promise.reject(&apos;Story is required&apos;)
+      }
+      if (star.story.length &gt; 500) {
+        return Promise.reject(&apos;Story is limited to 500 words. Maximum size is 500 bytes&apos;)
+      }
+      if (!util.isASCII(star.story)) {
+        return Promise.reject(&apos;Story contains non-ASCII symbols&apos;)
+      }
+      return true
+    })
+  ],
+  async (req, res) =&gt; {
+    // check data entries
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
+
+    try {
+      // Deny registration of a block if he/she did not send a valid signature
+      const isValid = await validateUtil.isValidSignature(req.body.address)
+
+      if (!isValid) {
+        throw new Error(&apos;Signature is not valid&apos;)
+      }
+    } catch (error) {
+      res.status(401).json({
+        status: 401,
+        message: error.message
+      })
+
+      return
+    }
+
+    // CRITERION: Star story must be encoded to hex before adding the block.
+    let star = req.body.star
+    // Encode the star story to hex here before making the block.
+    star.story = Buffer.from(req.body.star.story).toString(&apos;hex&apos;)
+
+    // organize the block to create
+    const block = {
+      address: req.body.address,
+      star: star
+    }
+
+    blockchain
+      .addBlock(new Block(block))
+      .then(success =&gt; {
+        // Override the previous request to prevent the user from placing additional blocks.
+        // He/she should return to request Validation and sign a new message in order to add another block.
+        validateUtil.invalidateSignature(req.body.address)
+
+        // Note: addBlock method was modified to return the block created
+        res.status(201).send(success)
+      })
+      .catch(() =&gt; {
+        // return a message in json format with error
+        res.json({ error: &apos;There was an error generating a new block&apos; })
+      })
+  }
+)
+//----------------------------------------------------------------------------------------------------------------------
+// Send 404 erro, route not found
+app.get(&apos;*&apos;, (req, res) =&gt; {
+  res.status(404).json({
+    status: 404,
+    message: &apos;Route not found. Check documentation.&apos;
+  })
+})
+//----------------------------------------------------------------------------------------------------------------------
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img
+    src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
