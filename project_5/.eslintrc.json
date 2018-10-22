@@ -1,0 +1,92 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest/globals": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": true,
+    "ecmaVersion": 2018
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "plugin:security/recommended",
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
+  ],
+  "plugins": [
+    "mocha",
+    "security",
+    "jest"
+  ],
+  "rules": {
+    "no-control-regex": 0,
+    "mocha/no-exclusive-tests": "error",
+    "node/exports-style": [
+      "error",
+      "module.exports"
+    ],
+    "node/prefer-global/buffer": [
+      "error",
+      "always"
+    ],
+    "node/prefer-global/console": [
+      "error",
+      "always"
+    ],
+    "node/prefer-global/process": [
+      "error",
+      "always"
+    ],
+    "node/prefer-global/url-search-params": [
+      "error",
+      "always"
+    ],
+    "node/prefer-global/url": [
+      "error",
+      "always"
+    ],
+    "semi": [
+      2,
+      "never"
+    ],
+    "no-console": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false
+      }
+    ],
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
+    "valid-jsdoc": [
+      2,
+      {
+        "prefer": {
+          "return": "returns"
+        }
+      }
+    ],
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        }
+      }
+    ]
+  }
+}
