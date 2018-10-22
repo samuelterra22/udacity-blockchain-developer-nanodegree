@@ -16,7 +16,7 @@ For the development of the project we used the [Express framework](https://expre
 ## See project code documentation
 
 ```
-npm run esdoc:open
+npm run doc:open
 ```
 
 ## Getting Started
