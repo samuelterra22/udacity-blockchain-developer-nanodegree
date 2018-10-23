@@ -13,14 +13,31 @@
 <div class="container">
   <h1>Star Notary</h1>
 
-  <div class="row">
-    <label class="bold">Star Name:</label>
-    <label id="star-name"></label>
+  <div class="row w-full">
+    <label class="w-1/2 bold" for="star-name">Star Name:</label>
+    <input class="w-1/2" id="star-name" name="star-name" required>
   </div>
 
   <div class="row">
-    <label class="bold">Star Owner:</label>
-    <label id="star-owner"></label>
+    <label class="w-1/2 bold" for="star-story">Star story:</label>
+    <input class="w-1/2" id="star-story" name="star-story" required>
+  </div>
+
+  <h4>Star coordinates</h4>
+
+  <div class="row">
+    <label class="w-1/2 bold" for="star-ra">Ra:</label>
+    <input class="w-1/2" id="star-ra" name="star-ra" required>
+  </div>
+
+  <div class="row">
+    <label class="w-1/2 bold" for="star-dec">Dec:</label>
+    <input class="w-1/2" id="star-dec" name="star-dec" required>
+  </div>
+
+  <div class="row">
+    <label class="w-1/2 bold" for="star-mag">Mag:</label>
+    <input class="w-1/2" id="star-mag" name="star-mag" required>
   </div>
 
   <button id="claim-button" onclick="claimButtonClicked()">Claim Star</button>
@@ -464,11 +481,11 @@
 
       var account = accounts[0]
 
-      var name = 'nameTest'
-      var story = 'storyTest'
-      var ra = 'raTest'
-      var dec = 'decTest'
-      var mag = 'magTest'
+      var name = document.getElementById('star-name').value
+      var story = document.getElementById('star-story').value
+      var ra = document.getElementById('star-ra').value
+      var dec = document.getElementById('star-dec').value
+      var mag = document.getElementById('star-mag').value
 
       starNotary.createStar.sendTransaction(name, story, ra, dec, mag, {
         from: account,
