@@ -1,7 +1,7 @@
 body {
     background-color: #F0F0F0;
     padding: 2em;
-    font-family: 'Raleway', 'Source Sans Pro', 'Arial';
+    font-family: 'Raleway', 'Source Sans Pro', 'Arial', serif;
 }
 
 .container {
@@ -15,6 +15,18 @@ body {
 
 .row {
     margin-bottom: 10px;
+}
+
+.w-1\/3 {
+    width: 33.3333%;
+}
+
+.w-1\/2 {
+    width: 50%;
+}
+
+.w-full {
+    width: 100%;
 }
 
 button {
