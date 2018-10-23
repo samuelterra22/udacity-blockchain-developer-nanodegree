@@ -133,6 +133,24 @@
           {
             'name': 'story',
             'type': 'string'
+          },
+          {
+            'components': [
+              {
+                'name': 'ra',
+                'type': 'string'
+              },
+              {
+                'name': 'dec',
+                'type': 'string'
+              },
+              {
+                'name': 'mag',
+                'type': 'string'
+              }
+            ],
+            'name': 'coordinates',
+            'type': 'tuple'
           }
         ],
         'payable': false,
@@ -378,6 +396,18 @@
           {
             'name': '_story',
             'type': 'string'
+          },
+          {
+            'name': 'ra',
+            'type': 'string'
+          },
+          {
+            'name': 'dec',
+            'type': 'string'
+          },
+          {
+            'name': 'mag',
+            'type': 'string'
           }
         ],
         'name': 'createStar',
@@ -435,8 +465,14 @@
 
       var name = 'nameTest'
       var story = 'storyTest'
+      var ra = 'raTest'
+      var dec = 'decTest'
+      var mag = 'magTest'
 
-      starNotary.createStar.sendTransaction(name, story, { from: account, gas: '2100' }, function(error, result) {
+      starNotary.createStar.sendTransaction(name, story, ra, dec, mag, {
+        from: account,
+        gas: '2100'
+      }, function(error, result) {
 
         if (!error) {
           console.log(result)

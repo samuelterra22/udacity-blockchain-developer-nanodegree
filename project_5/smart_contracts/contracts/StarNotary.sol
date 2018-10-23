@@ -10,17 +10,27 @@ contract StarNotary is ERC721 {
     struct Star {
         string name;
         string story;
+        Coordinates coordinates;
+    }
+
+    /* Star coordinates struct */
+    struct Coordinates {
+        string ra;
+        string dec;
+        string mag;
     }
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
 
-    function createStar(string _name, string _story) public {
+    function createStar(string _name, string _story, string ra, string dec, string mag) public {
 
         numTokens++;
         uint256 _tokenId = numTokens;
 
-        Star memory newStar = Star(_name, _story);
+        // add coordinates in struct
+        Coordinates memory coordinates = Coordinates(ra, dec, mag);
+        Star memory newStar = Star(_name, _story, coordinates);
 
         tokenIdToStarInfo[_tokenId] = newStar;
 
