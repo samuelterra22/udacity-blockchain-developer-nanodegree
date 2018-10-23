@@ -28,8 +28,12 @@
 
 <script>
 
-  // Instantiate and set Ganache as your provider
-  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+  if (typeof web3 != 'undefined') {
+    web3 = new Web3(web3.currentProvider) // what Metamask injected
+  } else {
+    // Instantiate and set Ganache as your provider
+    web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+  }
   // The default (top) wallet account from a list of test accounts
   web3.eth.defaultAccount = web3.eth.accounts[0]
   // The interface definition for your smart contract (the ABI)
@@ -114,21 +118,26 @@
 
   // Enable claim button being clicked
   function claimButtonClicked () {
-    starNotary.claimStar(function(error, result) {
-      if (!error) {
-
-        var starClaimedEvent = starNotary.starClaimed()
-        starClaimedEvent.watch(function(error, result) {
-          if (!error) {
-            location.reload()
-          } else {
-            console.log(error)
-          }
-        })
-
-      } else {
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
         console.log(error)
+        return
       }
+      var account = accounts[0]
+      starNotary.claimStar(function(error, result) {
+        if (!error) {
+          var starClaimedEvent = starNotary.starClaimed({ from: account })
+          starClaimedEvent.watch(function(error, result) {
+            if (!error) {
+              location.reload()
+            } else {
+              console.log('watching for star claimed event is failing')
+            }
+          })
+        } else {
+          console.log(error)
+        }
+      })
     })
   }
 </script>
