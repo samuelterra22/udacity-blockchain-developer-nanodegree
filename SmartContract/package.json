@@ -12,6 +12,7 @@
   "author": "Samuel Terra",
   "license": "MIT",
   "dependencies": {
-    "openzeppelin-solidity": "2.0.0"
+    "openzeppelin-solidity": "2.0.0",
+    "truffle-hdwallet-provider": "0.0.6"
   }
 }
