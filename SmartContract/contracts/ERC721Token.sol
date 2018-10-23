@@ -82,6 +82,11 @@ contract ERC721Token is ERC721 {
     /// @param _tokenId The NFT to transfer
     function transferFrom(address _from, address _to, uint256 _tokenId) external payable hasPermission(msg.sender, _tokenId) {
 
+        transferFromHelper(_from, _to, _tokenId);
+    }
+
+    function transferFromHelper(address _from, address _to, uint256 _tokenId) internal {
+
         tokenToOwner[_tokenId] = _to;
         ownerToBalance[_from] -= 1;
 
