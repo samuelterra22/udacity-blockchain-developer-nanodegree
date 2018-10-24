@@ -9,9 +9,9 @@ contract('StarNotary', accounts => {
   describe('can create a star', () => {
     it('can create a star and get its name', async function() {
 
-      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag', { from: accounts[0] })
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: accounts[0] })
 
-      assert.deepEqual(await this.contract.tokenIdToStarInfo(1), ['Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag'])
+      assert.deepEqual(await this.contract.tokenIdToStarInfo(1), ['Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978'])
     })
   })
 
@@ -24,7 +24,7 @@ contract('StarNotary', accounts => {
     let starPrice = web3.toWei(.01, 'ether')
 
     beforeEach(async function() {
-      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag', { from: user1 })
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: user1 })
     })
 
     it('user1 can put up their star for sale', async function() {
@@ -51,6 +51,15 @@ contract('StarNotary', accounts => {
         const balanceAfterTransaction = web3.eth.getBalance(user2)
 
         assert.equal(balanceBeforeTransaction.sub(balanceAfterTransaction), starPrice)
+      })
+    })
+
+    // checkIfStarExist test
+    describe('check if star exists', () => {
+      it('star already exists', async function() {
+        await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.153', 'dec_121.871', 'mag_245.971', { from: user1 })
+
+        assert.equal(await this.contract.checkIfStarExist('ra_032.153', 'dec_121.871', 'mag_245.971'), true)
       })
     })
   })

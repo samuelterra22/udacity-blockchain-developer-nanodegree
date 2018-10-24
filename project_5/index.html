@@ -472,7 +472,7 @@
             'type': 'string'
           }
         ],
-        'name': 'starExists',
+        'name': 'checkIfStarExist',
         'outputs': [
           {
             'name': '',
@@ -535,7 +535,7 @@
     ]
   )
   // Grab the contract at specified deployed address with the interface defined by the ABI
-  var starNotary = StarNotary.at('0xe63f518c6dfc724769c5731424f62534a42cbde8')
+  var starNotary = StarNotary.at('0x2f2aa34fc3893c721530a7bc3eb559caebee3bd2')
 
   // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
   // CRITERION: Client code interacts with smart contract / Claim a new star. Each new star support these pieces of metadata:
