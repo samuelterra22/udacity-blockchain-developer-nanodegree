@@ -30,7 +30,7 @@ contract StarNotary is ERC721 {
     mapping(bytes32 => bool) public starHashMap;
 
     // create a star
-    function createStar(string _name, string _story, string ra, string dec, string mag) public {
+    function createStar(string _name, string _story, string _ra, string _dec, string _mag) public {
 
         // block (start) height as a token identify
         numTokens++;
@@ -40,20 +40,20 @@ contract StarNotary is ERC721 {
         require(keccak256(abi.encodePacked(tokenIdToStarInfo[_tokenId].coordinates.dec)) == keccak256(""));
 
         // checks if the coordinates are not empty
-        require(keccak256(abi.encodePacked(ra)) != keccak256(""));
-        require(keccak256(abi.encodePacked(dec)) != keccak256(""));
-        require(keccak256(abi.encodePacked(mag)) != keccak256(""));
+        require(keccak256(abi.encodePacked(_ra)) != keccak256(""));
+        require(keccak256(abi.encodePacked(_dec)) != keccak256(""));
+        require(keccak256(abi.encodePacked(_mag)) != keccak256(""));
         require(_tokenId != 0);
-        require(!starExists(ra, dec, mag));
+        require(!starExists(_ra, _dec, _mag));
 
         // add coordinates in struct
-        Coordinates memory coordinates = Coordinates(ra, dec, mag);
+        Coordinates memory coordinates = Coordinates(_ra, _dec, _mag);
         Star memory newStar = Star(_name, _story, coordinates);
 
         tokenIdToStarInfo[_tokenId] = newStar;
 
         // set star hash as true
-        starHashMap[keccak256(abi.encodePacked(ra, dec, mag))] = true;
+        starHashMap[keccak256(abi.encodePacked(_ra, _dec, _mag))] = true;
 
         _mint(msg.sender, _tokenId);
     }
@@ -83,8 +83,8 @@ contract StarNotary is ERC721 {
     }
 
     // verify if already exists
-    function starExists(string ra, string dec, string mag) public view returns (bool) {
-        return starHashMap[keccak256(abi.encodePacked(ra, dec, mag))];
+    function starExists(string _ra, string _dec, string _mag) public view returns (bool) {
+        return starHashMap[keccak256(abi.encodePacked(_ra, _dec, _mag))];
     }
 
     // return star info

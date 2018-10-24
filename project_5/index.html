@@ -406,15 +406,15 @@
             'type': 'string'
           },
           {
-            'name': 'ra',
+            'name': '_ra',
             'type': 'string'
           },
           {
-            'name': 'dec',
+            'name': '_dec',
             'type': 'string'
           },
           {
-            'name': 'mag',
+            'name': '_mag',
             'type': 'string'
           }
         ],
@@ -460,19 +460,19 @@
         'constant': true,
         'inputs': [
           {
-            'name': 'ra',
+            'name': '_ra',
             'type': 'string'
           },
           {
-            'name': 'dec',
+            'name': '_dec',
             'type': 'string'
           },
           {
-            'name': 'mag',
+            'name': '_mag',
             'type': 'string'
           }
         ],
-        'name': 'checkIfStarExist',
+        'name': 'starExists',
         'outputs': [
           {
             'name': '',
@@ -535,7 +535,7 @@
     ]
   )
   // Grab the contract at specified deployed address with the interface defined by the ABI
-  var starNotary = StarNotary.at('0x4de38ac3ae870610e550ae45b917312f6408cd2a')
+  var starNotary = StarNotary.at('0xe63f518c6dfc724769c5731424f62534a42cbde8')
 
   // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
   // CRITERION: Client code interacts with smart contract / Claim a new star. Each new star support these pieces of metadata:
@@ -558,7 +558,7 @@
       var mag = document.getElementById('star-mag').value
 
       starNotary.createStar.sendTransaction(name, story, ra, dec, mag, {
-        from: account
+        from: account, gas: 1000000
       }, function(error, result) {
 
         if (!error) {
