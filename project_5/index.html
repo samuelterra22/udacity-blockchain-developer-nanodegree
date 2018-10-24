@@ -41,6 +41,19 @@
   </div>
 
   <button id="claim-button" onclick="claimButtonClicked()">Claim Star</button>
+
+  <h4>Show star info</h4>
+
+  <div class="row">
+    <label class="w-1/2 bold" for="star-token">Token id:</label>
+    <input class="w-1/2" id="star-token" name="star-token" required>
+  </div>
+
+  <div class="row">
+    <label id="star-token-result" class="w-full"></label>
+  </div>
+
+  <button id="info-button" onclick="infoButtonClicked()">Get info</button>
 </div>
 
 <script>
@@ -53,7 +66,7 @@
   }
 
   // The default (top) wallet account from a list of test accounts
-  web3.eth.defaultAccount = web3.eth.accounts[0]
+  web3.eth.defaultAccount = web3.eth.accounts[1]
 
   // The interface definition for your smart contract (the ABI)
   var StarNotary = web3.eth.contract(
@@ -134,47 +147,6 @@
         'type': 'function'
       },
       {
-        'constant': true,
-        'inputs': [
-          {
-            'name': '',
-            'type': 'uint256'
-          }
-        ],
-        'name': 'tokenIdToStarInfo',
-        'outputs': [
-          {
-            'name': 'name',
-            'type': 'string'
-          },
-          {
-            'name': 'story',
-            'type': 'string'
-          },
-          {
-            'components': [
-              {
-                'name': 'ra',
-                'type': 'string'
-              },
-              {
-                'name': 'dec',
-                'type': 'string'
-              },
-              {
-                'name': 'mag',
-                'type': 'string'
-              }
-            ],
-            'name': 'coordinates',
-            'type': 'tuple'
-          }
-        ],
-        'payable': false,
-        'stateMutability': 'view',
-        'type': 'function'
-      },
-      {
         'constant': false,
         'inputs': [
           {
@@ -250,6 +222,25 @@
           {
             'name': '',
             'type': 'uint256'
+          }
+        ],
+        'payable': false,
+        'stateMutability': 'view',
+        'type': 'function'
+      },
+      {
+        'constant': true,
+        'inputs': [
+          {
+            'name': '',
+            'type': 'bytes32'
+          }
+        ],
+        'name': 'starHashMap',
+        'outputs': [
+          {
+            'name': '',
+            'type': 'bool'
           }
         ],
         'payable': false,
@@ -464,22 +455,98 @@
         'payable': true,
         'stateMutability': 'payable',
         'type': 'function'
+      },
+      {
+        'constant': true,
+        'inputs': [
+          {
+            'name': 'ra',
+            'type': 'string'
+          },
+          {
+            'name': 'dec',
+            'type': 'string'
+          },
+          {
+            'name': 'mag',
+            'type': 'string'
+          }
+        ],
+        'name': 'checkIfStarExist',
+        'outputs': [
+          {
+            'name': '',
+            'type': 'bool'
+          }
+        ],
+        'payable': false,
+        'stateMutability': 'view',
+        'type': 'function'
+      },
+      {
+        'constant': true,
+        'inputs': [
+          {
+            'name': '_tokenId',
+            'type': 'uint256'
+          }
+        ],
+        'name': 'tokenIdToStarInfo',
+        'outputs': [
+          {
+            'name': '',
+            'type': 'string'
+          },
+          {
+            'name': '',
+            'type': 'string'
+          },
+          {
+            'name': '',
+            'type': 'string'
+          },
+          {
+            'name': '',
+            'type': 'string'
+          },
+          {
+            'name': '',
+            'type': 'string'
+          }
+        ],
+        'payable': false,
+        'stateMutability': 'view',
+        'type': 'function'
+      },
+      {
+        'constant': false,
+        'inputs': [
+          {
+            'name': '_tokenId',
+            'type': 'uint256'
+          }
+        ],
+        'name': 'mint',
+        'outputs': [],
+        'payable': false,
+        'stateMutability': 'nonpayable',
+        'type': 'function'
       }
     ]
   )
   // Grab the contract at specified deployed address with the interface defined by the ABI
-  var starNotary = StarNotary.at('0xde24f3d68ca86a94d472ecf1a393becbe81f49e2')
+  var starNotary = StarNotary.at('0x4de38ac3ae870610e550ae45b917312f6408cd2a')
 
   // // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
   // Enable claim button being clicked
   function claimButtonClicked () {
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
-        console.log(error)
+        alert(error)
         return
       }
 
-      var account = accounts[0]
+      var account = accounts[1]
 
       var name = document.getElementById('star-name').value
       var story = document.getElementById('star-story').value
@@ -488,26 +555,47 @@
       var mag = document.getElementById('star-mag').value
 
       starNotary.createStar.sendTransaction(name, story, ra, dec, mag, {
-        from: account,
-        gas: '2100'
+        from: account
       }, function(error, result) {
 
         if (!error) {
-          console.log(result)
+          alert(result)
 
           var starClaimedEvent = starNotary.Transfer()
           starClaimedEvent.watch(function(error, result) {
             if (!error) {
-              console.log('transaction completed')
+              alert('transaction completed')
             } else {
-              console.log('watching for star claimed event is failing')
+              alert('watching for star claimed event is failing')
             }
           })
         } else {
-          console.log(error)
+          alert(error)
         }
       })
 
+    })
+  }
+
+  // Enable info button being clicked
+  function infoButtonClicked () {
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        alert(error)
+        return
+      }
+      const account = accounts[1]
+      const tokenId = document.getElementById('star-token').value
+
+      starNotary.tokenIdToStarInfo.call(tokenId, function(error, result) {
+        if (!error) {
+          alert(result)
+          document.getElementById('star-token-result').innerHTML = result
+        } else {
+          alert(error)
+        }
+      })
     })
   }
 </script>
