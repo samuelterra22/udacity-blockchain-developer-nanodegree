@@ -4,7 +4,6 @@ contract('StarNotary', accounts => {
 
   let user1 = accounts[0]
   let user2 = accounts[1]
-  let randomMaliciousUser = accounts[2]
 
   let starId = 1
   let starPrice = web3.toWei(.01, 'ether')
@@ -38,7 +37,7 @@ contract('StarNotary', accounts => {
   it('token belong to the right owner', async function() {
     await this.contract.mint(starId, { from: user1 })
 
-    var owner = await this.contract.ownerOf(1, { from: user1 })
+    let owner = await this.contract.ownerOf(1, { from: user1 })
     assert.equal(owner, user1)
   })
 
