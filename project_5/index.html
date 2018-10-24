@@ -537,7 +537,8 @@
   // Grab the contract at specified deployed address with the interface defined by the ABI
   var starNotary = StarNotary.at('0x4de38ac3ae870610e550ae45b917312f6408cd2a')
 
-  // // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
+  // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
+  // CRITERION: Client code interacts with smart contract / Claim a new star. Each new star support these pieces of metadata:
   // Enable claim button being clicked
   function claimButtonClicked () {
     web3.eth.getAccounts(function(error, accounts) {
@@ -546,8 +547,10 @@
         return
       }
 
+      // select account 1
       var account = accounts[1]
 
+      // get star attributes from inputs
       var name = document.getElementById('star-name').value
       var story = document.getElementById('star-story').value
       var ra = document.getElementById('star-ra').value
@@ -577,15 +580,16 @@
     })
   }
 
+  // CRITERION: Client code interacts with smart contract / Lookup a star by ID using tokenIdToStarInfo()
   // Enable info button being clicked
   function infoButtonClicked () {
-
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         alert(error)
         return
       }
-      const account = accounts[1]
+
+      // get token id from input
       const tokenId = document.getElementById('star-token').value
 
       starNotary.tokenIdToStarInfo.call(tokenId, function(error, result) {
