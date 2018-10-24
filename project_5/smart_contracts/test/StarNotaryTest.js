@@ -55,12 +55,17 @@ contract('StarNotary', accounts => {
     })
 
     // checkIfStarExist test
-    describe('check if star exists', () => {
-      it('star already exists', async function() {
+    it('star exists', async function() {
         await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.153', 'dec_121.871', 'mag_245.971', { from: user1 })
 
         assert.equal(await this.contract.checkIfStarExist('ra_032.153', 'dec_121.871', 'mag_245.971'), true)
       })
+
+    it('star has correct owner after created', async function() {
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.153', 'dec_121.871', 'mag_245.971', { from: user1 })
+      const starOwner = await this.contract.ownerOf(1, { from: user1 })
+
+      assert.equal(starOwner, user1)
     })
   })
 })
