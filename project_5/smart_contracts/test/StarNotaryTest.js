@@ -9,9 +9,9 @@ contract('StarNotary', accounts => {
   describe('can create a star', () => {
     it('can create a star and get its name', async function() {
 
-      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: accounts[0] })
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag', { from: accounts[0] })
 
-      assert.deepEqual(await this.contract.tokenIdToStarInfo(1), ['Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978'])
+      assert.deepEqual(await this.contract.tokenIdToStarInfo(1), ['Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag'])
     })
   })
 
@@ -24,7 +24,7 @@ contract('StarNotary', accounts => {
     let starPrice = web3.toWei(.01, 'ether')
 
     beforeEach(async function() {
-      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: user1 })
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag', { from: user1 })
     })
 
     it('user1 can put up their star for sale', async function() {
