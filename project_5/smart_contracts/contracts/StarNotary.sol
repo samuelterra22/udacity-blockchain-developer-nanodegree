@@ -44,7 +44,7 @@ contract StarNotary is ERC721 {
         require(keccak256(abi.encodePacked(_dec)) != keccak256(""));
         require(keccak256(abi.encodePacked(_mag)) != keccak256(""));
         require(_tokenId != 0);
-        require(!starExists(_ra, _dec, _mag));
+        require(!checkIfStarExist(_ra, _dec, _mag));
 
         // add coordinates in struct
         Coordinates memory coordinates = Coordinates(_ra, _dec, _mag);
@@ -83,7 +83,7 @@ contract StarNotary is ERC721 {
     }
 
     // verify if already exists
-    function starExists(string _ra, string _dec, string _mag) public view returns (bool) {
+    function checkIfStarExist(string _ra, string _dec, string _mag) public view returns (bool) {
         return starHashMap[keccak256(abi.encodePacked(_ra, _dec, _mag))];
     }
 
