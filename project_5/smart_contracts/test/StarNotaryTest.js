@@ -80,4 +80,16 @@ contract('StarNotary', accounts => {
     assert.equal(await this.contract.getApproved(starId, { from: user1 }), user2)
   })
 
+  describe('approval for all addresses', async () => {
+    // create a new contract
+    this.contract = await StarNotary.new({ from: accounts[0] })
+
+    it('approve all address', async function() {
+      await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: user1 })
+      await this.contract.setApprovalForAll(user2, starId)
+
+      assert.equal(await this.contract.isApprovedForAll(user1, user2, { from: user1 }), true)
+    })
+  })
+
 })
