@@ -72,4 +72,12 @@ contract('StarNotary', accounts => {
     assert.equal(balanceBeforeTransaction.sub(balanceAfterTransaction), starPrice)
   })
 
+  it('approve address', async function() {
+    await this.contract.createStar('Star power 103!', 'I love my wonderful star', 'ra_032.155', 'dec_121.874', 'mag_245.978', { from: user1 })
+
+    await this.contract.approve(user2, starId, { from: user1 })
+
+    assert.equal(await this.contract.getApproved(starId, { from: user1 }), user2)
+  })
+
 })
