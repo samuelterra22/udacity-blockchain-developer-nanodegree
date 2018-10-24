@@ -55,6 +55,7 @@ contract StarNotary is ERC721 {
         // set star hash as true
         starHashMap[keccak256(abi.encodePacked(_ra, _dec, _mag))] = true;
 
+        // Reverts if the given token ID already exists
         _mint(msg.sender, _tokenId);
     }
 
@@ -99,6 +100,7 @@ contract StarNotary is ERC721 {
 
     // simple override mint method from parent
     function mint(uint256 _tokenId) public {
+        // Reverts if the given token ID already exists
         super._mint(msg.sender, _tokenId);
     }
 }
