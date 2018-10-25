@@ -58,8 +58,6 @@
 
 <script>
 
-  // tx 0x67c876026a37336c8c5cfb38442999c029a04d694a7ec65033d23bcb5ea47303
-
   if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider) // what Metamask injected
   } else {
@@ -68,7 +66,7 @@
   }
 
   // The default (top) wallet account from a list of test accounts
-  web3.eth.defaultAccount = web3.eth.accounts[1]
+  web3.eth.defaultAccount = web3.eth.accounts[0]
 
   // The interface definition for your smart contract (the ABI)
   var StarNotary = web3.eth.contract(
@@ -537,7 +535,7 @@
     ]
   )
   // Grab the contract at specified deployed address with the interface defined by the ABI
-  var starNotary = StarNotary.at('0x2f2aa34fc3893c721530a7bc3eb559caebee3bd2')
+  var starNotary = StarNotary.at('0x219eb4a0ba979bdf28582c8996dffcb723ac46b8')
 
   // CRITERION: Deploy smart contract on a public test network / Execute createStar() function
   // CRITERION: Client code interacts with smart contract / Claim a new star. Each new star support these pieces of metadata:
@@ -550,7 +548,7 @@
       }
 
       // select account 1
-      var account = accounts[1]
+      var account = accounts[0]
 
       // get star attributes from inputs
       var name = document.getElementById('star-name').value
@@ -560,7 +558,7 @@
       var mag = document.getElementById('star-mag').value
 
       starNotary.createStar.sendTransaction(name, story, ra, dec, mag, {
-        from: account, gas: 1000000
+        from: account
       }, function(error, result) {
 
         if (!error) {
