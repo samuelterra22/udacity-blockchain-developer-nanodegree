@@ -17,7 +17,7 @@
 
 var HDWalletProvider = require('truffle-hdwallet-provider')
 
-var mnemonic = 'sustain turkey until tape jelly decide grid situate inside problem orient allow'
+var mnemonic = 'cram poverty tilt athlete gun act soon mountain bridge suffer churn share'
 
 module.exports = {
   networks: {
@@ -31,7 +31,7 @@ module.exports = {
         return new HDWalletProvider(mnemonic, 'https://rinkeby.infura.io/v3/943812c88c77438392df11b19ed0c26b')
       },
       network_id: 4,
-      gas: 4500000,
+      gas: 6700000,
       gasPrice: 10000000000
     }
   }
