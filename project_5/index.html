@@ -54,10 +54,11 @@
   </div>
 
   <button id="info-button" onclick="infoButtonClicked()">Get info</button>
-  <button id="info-buttona" onclick="getStarsInSale()">getStarsInSale</button>
 </div>
 
 <script>
+
+  // tx 0x67c876026a37336c8c5cfb38442999c029a04d694a7ec65033d23bcb5ea47303
 
   if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider) // what Metamask injected
@@ -634,33 +635,6 @@
           alert(error)
         }
       })
-    })
-  }
-
-  function getStarsInSale () {
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        alert(error)
-        return
-      }
-
-      starNotary.starsForSale.call('', function(error, result) {
-        if (!error) {
-          alert(result)
-          document.getElementById('star-token-result').innerHTML = result
-        } else {
-          alert(error)
-        }
-      })
-
-      /*starNotary.putStarUpForSale.call(1, 0.2,function(error, result) {
-        if (!error) {
-          alert(result)
-          document.getElementById('star-token-result').innerHTML = result
-        } else {
-          alert(error)
-        }
-      })*/
     })
   }
 </script>

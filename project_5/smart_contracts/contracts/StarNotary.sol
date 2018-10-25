@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
 // CRITERION: Smart contract contains required functions / OpenZeppelin implements all requested methods
-
 import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
 // CRITERION: Define and implement interface / Smart contract implements the ERC-721 or ERC721Token interface
@@ -24,8 +23,6 @@ contract StarNotary is ERC721 {
         string dec;
         string mag;
     }
-
-    uint256[] public starsInSale;
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
@@ -66,7 +63,6 @@ contract StarNotary is ERC721 {
         require(this.ownerOf(_tokenId) == msg.sender);
 
         starsForSale[_tokenId] = _price;
-        starsInSale.push(_tokenId);
     }
 
     function buyStar(uint256 _tokenId) public payable {
@@ -84,9 +80,6 @@ contract StarNotary is ERC721 {
         if (msg.value > starCost) {
             msg.sender.transfer(msg.value - starCost);
         }
-
-        // remove token from list of stars in sale
-        removeByValue(_tokenId);
     }
 
     // verify if already exists
@@ -108,32 +101,5 @@ contract StarNotary is ERC721 {
     function mint(uint256 _tokenId) public {
         // Reverts if the given token ID already exists
         super._mint(msg.sender, _tokenId);
-    }
-
-    /////
-
-    function findStarsInSale(uint256 _tokenId) private view returns (uint256) {
-        uint256 i = 0;
-        while (starsInSale[i] != _tokenId) {
-            i++;
-        }
-        return i;
-    }
-
-    function removeByValue(uint256 _tokenId) private {
-        uint256 i = findStarsInSale(_tokenId);
-        removeByIndex(i);
-    }
-
-    function removeByIndex(uint256 i) private {
-        while (i < starsInSale.length - 1) {
-            starsInSale[i] = starsInSale[i + 1];
-            i++;
-        }
-        starsInSale.length--;
-    }
-
-    function starsForSale() public view returns (uint256[]) {
-        return starsInSale;
     }
 }
