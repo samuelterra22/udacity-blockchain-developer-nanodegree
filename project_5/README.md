@@ -8,7 +8,7 @@ Previously, you learned to create your own private blockchain web service. In th
 #### Terminal output
 
 ```bash
-samuel@machine:~/Dropbox/Projects/udacity-blockchain-developer-nanodegree/project_5/smart_contracts$ truffle deploy --network rinkeby
+samuel@machine:~/Dropbox/Projects/udacity-blockchain-developer-nanodegree/project_5/smart_contracts$ truffle migrate --network rinkeby --reset --compile-all
 Compiling ./contracts/Migrations.sol...
 Compiling ./contracts/StarNotary.sol...
 Compiling openzeppelin-solidity/contracts/introspection/ERC165.sol...
@@ -23,35 +23,46 @@ Writing artifacts to ./build/contracts
 Using network 'rinkeby'.
 
 Running migration: 1_initial_migration.js
-  Deploying Migrations...
-  ... 0xd3facbe4a8ec3f4eb1bf2eb1b0325477f660a71f3571fa2530da0135bd3942e9
-  Migrations: 0x1fb4129f5ecff01533f6f9af4df7d8cb2bfd02a4
+  Replacing Migrations...
+  ... 0x4f6e266ada524b61c0b9010ef79927e847658be04e5e6718357f84f5f399aaa9
+  Migrations: 0x3f55f20bc283a975ca468f3b6612d697183c3282
 Saving successful migration to network...
-  ... 0xbfb7e6d156221e19bc97448f6245270987fa728ec0a6d3e45d5abf10551bf1b6
+  ... 0xd59cce5422262055de35f7294e27d361b382b8fe96b94b1284603ba8a922958b
 Saving artifacts...
 Running migration: 2_deploy_star_notary.js
-  Deploying StarNotary...
-  ... 0xf6e99caee1dc37b9b9ca7e65a3c080459943c88c7ebe269147be64cfe0ee38b7
-  StarNotary: 0xa9c54b772fadb6d5ff0dd03d179e9e577c933843
+  Replacing StarNotary...
+  ... 0xaee99cadf968c08631aa91a9afaef6cb328a2ae21f2590d1a2261cc2b8a28ebc
+  StarNotary: 0x219eb4a0ba979bdf28582c8996dffcb723ac46b8
 Saving successful migration to network...
-  ... 0xf4b08a9ddfd9c455dfb4cc2e74fcef3ebe76252f5b1c3fa98f081ef9ebe1d1a0
+  ... 0xcb4e7a3b5cab537b66232ae2293cd90688ce267e4d9747b33c7d2665e8bdd75f
 Saving artifacts...
 
-```
-
-#### Transaction ID
-
-https://rinkeby.etherscan.io/tx/0xf6e99caee1dc37b9b9ca7e65a3c080459943c88c7ebe269147be64cfe0ee38b7
-```bash
-0xf6e99caee1dc37b9b9ca7e65a3c080459943c88c7ebe269147be64cfe0ee38b7
 ```
 
 #### Contract address
 
-https://rinkeby.etherscan.io/address/0xa9c54b772fadb6d5ff0dd03d179e9e577c933843
+https://rinkeby.etherscan.io/address/0x219eb4a0ba979bdf28582c8996dffcb723ac46b8
 ```bash
-0xa9c54b772fadb6d5ff0dd03d179e9e577c933843
+0x219eb4a0ba979bdf28582c8996dffcb723ac46b8
 ```
+
+#### Contract Hash
+
+https://rinkeby.etherscan.io/tx/0xaee99cadf968c08631aa91a9afaef6cb328a2ae21f2590d1a2261cc2b8a28ebc
+```bash
+0xaee99cadf968c08631aa91a9afaef6cb328a2ae21f2590d1a2261cc2b8a28ebc
+```
+
+#### Transaction ID
+
+https://rinkeby.etherscan.io/tx/0x1e345e1d7602b54dabbb3b7e74faf318a584f319185f90ffb4d0c94ee37965e9
+```bash
+0x1e345e1d7602b54dabbb3b7e74faf318a584f319185f90ffb4d0c94ee37965e9
+```
+
+#### Star Token id
+
+**1**
 
 ## Udacity honor code
 
