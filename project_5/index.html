@@ -96,6 +96,25 @@
         'constant': true,
         'inputs': [
           {
+            'name': '',
+            'type': 'uint256'
+          }
+        ],
+        'name': 'starsForSale',
+        'outputs': [
+          {
+            'name': '',
+            'type': 'uint256'
+          }
+        ],
+        'payable': false,
+        'stateMutability': 'view',
+        'type': 'function'
+      },
+      {
+        'constant': true,
+        'inputs': [
+          {
             'name': 'tokenId',
             'type': 'uint256'
           }
@@ -312,25 +331,6 @@
         'type': 'function'
       },
       {
-        'constant': true,
-        'inputs': [
-          {
-            'name': '',
-            'type': 'uint256'
-          }
-        ],
-        'name': 'starsInSale',
-        'outputs': [
-          {
-            'name': '',
-            'type': 'uint256'
-          }
-        ],
-        'payable': false,
-        'stateMutability': 'view',
-        'type': 'function'
-      },
-      {
         'anonymous': false,
         'inputs': [
           {
@@ -533,39 +533,6 @@
         'payable': false,
         'stateMutability': 'nonpayable',
         'type': 'function'
-      },
-      {
-        'constant': true,
-        'inputs': [
-          {
-            'name': '',
-            'type': 'uint256'
-          }
-        ],
-        'name': 'starsForSale',
-        'outputs': [
-          {
-            'name': '',
-            'type': 'uint256'
-          }
-        ],
-        'payable': false,
-        'stateMutability': 'view',
-        'type': 'function'
-      },
-      {
-        'constant': true,
-        'inputs': [],
-        'name': 'starsForSale',
-        'outputs': [
-          {
-            'name': '',
-            'type': 'uint256[]'
-          }
-        ],
-        'payable': false,
-        'stateMutability': 'view',
-        'type': 'function'
       }
     ]
   )
@@ -618,7 +585,7 @@
   // CRITERION: Client code interacts with smart contract / Lookup a star by ID using tokenIdToStarInfo()
   // Enable info button being clicked
   function infoButtonClicked () {
-    web3.eth.getAccounts(function(error, accounts) {
+    web3.eth.getAccounts(function(error) {
       if (error) {
         alert(error)
         return
